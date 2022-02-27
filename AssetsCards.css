@@ -1,0 +1,54 @@
+.for_sale_title{
+    width: 100%;
+    text-align: center;
+}
+.for_sale_title h1{
+    margin: 5px;
+    padding: 0;
+}
+.assets_wrapper{
+    direction: rtl;
+    background-color: rgb(236, 236, 236);
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding: 20px;
+    color: #333333;
+}
+.asset_card{
+    position: relative;
+    width: 240px;
+    height: 180px;
+    background-color: #fff;
+    margin: 10px;
+    background-size: 100% 100%;
+    cursor: pointer;
+}
+.asset_card:hover{
+    box-shadow: 0 0 8px 0;
+}
+.asset_card .description{
+    position: absolute;
+    width: 100%;
+    height: fit-content;
+    bottom: 0;
+    color: #F9F9F9;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+}
+.asset_card .description *{
+    margin-right: 3px;
+}
+.asset_card .description h4{
+    margin: 0;
+    margin-right: 3px;
+    padding: 0;
+    font-size: auto;
+}
+.asset_card .description span{
+    font-size: 15px;
+}

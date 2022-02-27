@@ -1,0 +1,145 @@
+body{
+    padding: 0;
+    margin: 0;
+    background: #DDDDDD;
+}
+.container{
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* border-bottom: 1px solid #3d3d3d; */
+    direction: rtl;
+}
+.logo h1 {
+    font-size: 40px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    color: #fff;
+}
+.logo a:link{
+    text-decoration: none;
+}
+/* .img-section{
+    width: 200px;
+    height: 200px;
+    margin-left: 12px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+}
+
+.img-section img{
+    width: 200px;
+    height: auto;
+} */
+.img-section{
+    height: 200px;
+    width: 200px;
+    position: relative;
+    border: 5px solid #fff;
+    margin-left: 12px;
+    border-radius: 50%;
+    background-size: 100% 100%;
+    overflow: hidden;
+    align-items: center;
+}
+.my_file{
+    position: absolute;
+    bottom: 0;
+    outline: none;
+    color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 80px;
+    cursor: pointer;
+    transition: 0.5s;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+}
+.my_file::-webkit-file-upload-button{
+    visibility: hidden;
+
+}
+.my_file::before{
+    content: '\f030';
+    font-family: fontAwesome;
+    font-size: 38px;
+    color: #fff;
+    display: inline-block;
+    /* -webkit-user-select: none; */
+}
+.my_file::after{
+    content: 'Update';
+    font-family: 'arial';
+    font-weight: bold;
+    color: #fff;
+    display: block;
+    top: 70px;
+    font-size: 14px;
+    position: absolute;
+}
+.my_file:hover{
+    opacity: 1;
+}
+.update_picture{
+    visibility: hidden;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #646464;
+}
+.details{
+    border-right: 1px solid #8d8d8d;
+    border-left: 1px solid #8d8d8d;
+    line-height: 20px;
+}
+.details ul{
+    list-style-type: none;
+    margin-left: 12px;
+}
+.details span{
+    font-weight: bold;
+    font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.social{
+    margin-left: 24px;
+    text-align: center;
+}
+.social a{
+    margin: 3px;
+    font-size: 22px;
+}
+.edit{
+    margin-left: 24px;
+    display: flex;
+    flex-direction: column;
+}
+.edit span{
+    margin: 8px;
+}
+.edit a{
+    text-align: center;
+    margin: 8px;
+    font-size: 22px;
+}
+
+@media screen and (max-width: 675px){
+    .container{
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .details{
+        border-right: none;
+        border-left: none;
+        border-top: 1px solid #8d8d8d;
+    }
+    .img-section{
+        margin-left: 0;
+    }
+    
+}
