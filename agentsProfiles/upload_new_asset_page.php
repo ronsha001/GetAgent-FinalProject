@@ -8,7 +8,13 @@
         exit();
     }
 
-
+    $value = '';
+    $type = 'hidden';
+    if (isset($_SESSION['status']) and !empty($_SESSION['status'])){
+        $value = $_SESSION['status'];
+        $type = 'text';
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../Nav.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="upload_new_asset_page_style.css">
-    <title>פרופיל הסוכן שלי</title>
+    <title>פרסום נכס חדש</title>
 </head>
 
     <style>
@@ -68,11 +74,15 @@
     <div class="main_container">
     <div class="main_wrapper">
 
+        <div class="error">
+            <input type="<?php echo $type ?>" value="<?php echo $value; unset($_SESSION['status']);; ?>" disabled>
+        </div>
+
         <div class="title_wrapper">
             <h1>פרסום נכס</h1>
         </div>
 
-        <form action="#" method="POST" onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
+        <form action="upload_new_asset_code.php" method="POST" id="myForm" onsubmit="return isValidForm()" onkeydown="return event.key != 'Enter';" enctype="multipart/form-data">
             <div class="info_section">
 
                 <div class="select_info_section">
@@ -96,25 +106,25 @@
                         </div>
                         <select name="asset_type" id="asset_type" required>
                             <option value="" selected="true" disabled="disabled">בחר סוג נכס</option>
-                            <option value="apartment">דירה</option>
-                            <option value="garden_apartment">דירת גן</option>
-                            <option value="private_house">בית פרטי/קטג'</option>
-                            <option value="roof">גג/פנטהאוז</option>
-                            <option value="fields">מגרשים</option>
-                            <option value="duplex">דופלקס</option>
-                            <option value="vacation_apartment">דירת נופש</option>
-                            <option value="town_house">דו משפחתי</option>
-                            <option value="basement">מרתף/פרטר</option>
-                            <option value="triplex">טריפלקס</option>
-                            <option value="unit">יחידת דיור</option>
-                            <option value="farm">משק חקלאי/נחלה</option>
-                            <option value="auxiliary_farm">משק עזר</option>
-                            <option value="assisted living">דיור מוגן</option>
-                            <option value="building">בניין מגורים</option>
-                            <option value="studio">סטודיו/לופט</option>
-                            <option value="storage">מחסן</option>
-                            <option value="park_station">חניה</option>
-                            <option value="general">כללי</option>
+                            <option value="דירה">דירה</option>
+                            <option value="דירת גן">דירת גן</option>
+                            <option value="בית פרטי/קוטג">בית פרטי/קוטג</option>
+                            <option value="גג/פנטהאוז">גג/פנטהאוז</option>
+                            <option value="מגרשי">מגרשים</option>
+                            <option value="דופלקס">דופלקס</option>
+                            <option value="דירת נופש">דירת נופש</option>
+                            <option value="דו משפחתי">דו משפחתי</option>
+                            <option value="מרתף/פרטר">מרתף/פרטר</option>
+                            <option value="טריפלקס">טריפלקס</option>
+                            <option value="יחידת דיור">יחידת דיור</option>
+                            <option value="משק חקלאי/נחלה">משק חקלאי/נחלה</option>
+                            <option value="משק עזר">משק עזר</option>
+                            <option value="דיור מוגן">דיור מוגן</option>
+                            <option value="בניין מגורים">בניין מגורים</option>
+                            <option value="סטודיו/לופט">סטודיו/לופט</option>
+                            <option value="מחסן">מחסן</option>
+                            <option value="חניה">חניה</option>
+                            <option value="כללי">כללי</option>
                             
                         </select>
                     </div>
@@ -122,7 +132,7 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>סטטוס הנכס:</label>
+                            <label>מצב הנכס:</label>
                         </div>
                         <select name="asset_condition" id="asset_condition" required>
                             <option value="" selected="true" disabled="disabled">מצב הנכס:</option>
@@ -145,6 +155,14 @@
                             </datalist>
                             
                         </input>
+                    </div>
+
+                    <div class="select_info">
+                        <div class="labels">
+                            <label class="required_label">*</label>
+                            <label>רחוב:</label>
+                        </div>
+                        <input type="text" name="street" required>
                     </div>
 
                     <div class="select_info">
@@ -235,7 +253,7 @@
                         <div class="checkbox">
                             <input type="checkbox" name="bars">
                             <div class="labels">
-                                <label>סורגם</label>
+                                <label>סורגים</label>
                             </div>
                         </div>
 
@@ -300,18 +318,27 @@
                     <div class="price_container">
                         <div class="price_wrapper">
 
-                        
                             <div class="labels">
                                 <label>מחיר:</label>
                             </div>
                             <div class="price">
                                 <input type="text" name="price" id="price"/>
-                                <input type="hidden" id="hidden_price">
                                 <select name="currency">
                                     <option selected value="shekel">₪</option>
                                     <option value="dollar">$</option>
                                 </select>
                             </div>
+
+                        </div>
+                        <div class="price_wrapper">
+
+                            <div class="labels">
+                                <label>ארנונה:</label>
+                            </div>
+                            <div class="price">
+                                <input type="text" name="tax" id="tax"/>
+                            </div>
+
                         </div>
                     </div>
 
@@ -347,7 +374,7 @@
                             <div id="cancel-btn1"><i class="fas fa-times"></i></div>
                             <div class="file-name1">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file1" id="default-btn1" hidden>
+                        <input type="file" name="file1" id="default-btn1" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive1()" id="custom-btn1">בחר תמונה</button>
                     </div>
 
@@ -363,7 +390,7 @@
                             <div id="cancel-btn2"><i class="fas fa-times"></i></div>
                             <div class="file-name2">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file2" id="default-btn2" hidden>
+                        <input type="file" name="file2" id="default-btn2" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive2()" id="custom-btn2">בחר תמונה</button>
                     </div>
 
@@ -379,7 +406,7 @@
                             <div id="cancel-btn3"><i class="fas fa-times"></i></div>
                             <div class="file-name3">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file3" id="default-btn3" hidden>
+                        <input type="file" name="file3" id="default-btn3" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive3()" id="custom-btn3">בחר תמונה</button>
                     </div>
 
@@ -395,7 +422,7 @@
                             <div id="cancel-btn4"><i class="fas fa-times"></i></div>
                             <div class="file-name4">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file4" id="default-btn4" hidden>
+                        <input type="file" name="file4" id="default-btn4" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive4()" id="custom-btn4">בחר תמונה</button>
                     </div>
 
@@ -411,7 +438,7 @@
                             <div id="cancel-btn5"><i class="fas fa-times"></i></div>
                             <div class="file-name5">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file5" id="default-btn5" hidden>
+                        <input type="file" name="file5" id="default-btn5" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive5()" id="custom-btn5">בחר תמונה</button>
                     </div>
 
@@ -427,7 +454,7 @@
                             <div id="cancel-btn6"><i class="fas fa-times"></i></div>
                             <div class="file-name6">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file6" id="default-btn6" hidden>
+                        <input type="file" name="file6" id="default-btn6" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive6()" id="custom-btn6">בחר תמונה</button>
                     </div>
 
@@ -443,7 +470,7 @@
                             <div id="cancel-btn7"><i class="fas fa-times"></i></div>
                             <div class="file-name7">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file7" id="default-btn7" hidden>
+                        <input type="file" name="file7" id="default-btn7" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive7()" id="custom-btn7">בחר תמונה</button>
                     </div>
 
@@ -459,7 +486,7 @@
                             <div id="cancel-btn8"><i class="fas fa-times"></i></div>
                             <div class="file-name8">שם תמונה</i></div>
                         </div>
-                        <input type="file" name="file8" id="default-btn8" hidden>
+                        <input type="file" name="file8" id="default-btn8" accept="image/png, image/gif, image/jpeg, image/jpg" hidden>
                         <button type="button" onclick="defaultBtnActive8()" id="custom-btn8">בחר תמונה</button>
                     </div>
 
@@ -468,13 +495,31 @@
             <!-- ************** -->
 
             <div class="submit_wrapper">
-                <input type="submit" name="submit" value="פרסם">
+                <input type="submit" name="submit" id="submit" value="פרסם">
             </div>
         </form>
         <script src="Date.js" type="text/javascript"></script>
         <script src="Cities.js" type="text/javascript"></script>
         <script src="PriceSeparator.js" type="text/javascript"></script>
         <script>
+
+            var submitBtn = document.getElementById('submit');
+            var cityInput = document.getElementById('city');
+            document.getElementById('myForm').onsubmit = function() {
+                return isValidForm();
+            }
+            
+
+            function isValidForm(){
+                if(cities.includes(cityInput.value)){
+                    return true;
+                } else {
+                    alert("בחר עיר מהרשימה.")
+                    return false;
+                }
+            }
+
+
             const wrapper1 = document.querySelector(".wrapper1");
             const fileName1 = document.querySelector(".file-name1");
             const cancelBtn1 = document.querySelector("#cancel-btn1");

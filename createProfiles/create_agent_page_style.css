@@ -20,10 +20,11 @@ body{
     top: 52%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 470px;
+    width: 65%;
     height: 80%;
     background: rgba(255, 255, 255, 1);
     border-radius: 10px;
+    overflow-x: hidden;
     overflow-y: scroll;
     padding-bottom: 20px;
 }
@@ -162,6 +163,12 @@ input[type="submit"]:hover{
     background: #ff0101;
     color: #fff;
     font-family: serif;
+}
+#description{
+    border: 1px solid #c4c4c4;
+}
+#description:hover{
+    border: 1px solid #2691d9;
 }
 
 /* **************** */
@@ -471,13 +478,17 @@ select::-ms-expand{
     width: 100%;
 }
 
-
+@media only screen and (max-width: 900px){
+    .center{
+        width: 90%;
+    }
+}
 @media only screen and (max-width: 500px) {
     body{
         height: 100vh;
     }
     .center{
-        width: 330px;
+        /* width: 330px; */
         height: 500px;
         overflow-y: scroll;
         top: 54%;

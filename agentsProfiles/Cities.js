@@ -1480,9 +1480,20 @@ const cities = [
 ];
 
 var list = document.getElementById('cities');
-
+var option;
 cities.forEach(function(item){
-    var option = document.createElement('option');
+    option = document.createElement('option');
     option.value = item;
     list.appendChild(option);
 });
+
+var submitBtn = document.getElementById('submit');
+var cityInput = document.getElementById('city');
+
+function checkCity(){
+    if(cities.includes(cityInput.value)){
+        console.log("yess");
+    } else {
+        console.log("nooo");
+    }
+}

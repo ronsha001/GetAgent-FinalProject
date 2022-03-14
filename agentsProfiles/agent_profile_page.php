@@ -7,6 +7,7 @@
         header("Location: ../createProfiles/create_agent_page.php");
         exit();
     }
+    $email = $_SESSION['email'];
     $picture_path = $_SESSION['picture_path'];
     $logo = $_SESSION['logo_path'];
     $agent_cities = $_SESSION['agent_cities'];
@@ -35,6 +36,7 @@
             $formatted_agent_cities .= $agent_cities[$i];
         }
     }
+    $id = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +119,21 @@
                 <?php if($website_link > ""){echo ("<span>לינק לאתר: <a href='$website_link' target='_blank'>לחץ כאן</a></span>");} ?>
                 <?php if($office_address > ""){echo ("<span>כתובת משרד: <a target='_blank' href='https://www.google.co.il/maps/place/$office_address, ישראל'>$office_address</a></span>");} ?>
             </div>
+            <div class="map">
+            <?php
+            if($office_address > ""){
+                echo("<iframe
+                width='100%'
+                height='250'
+                style='border:0'
+                loading='lazy'
+                allowfullscreen
+                src='https://www.google.com/maps/embed/v1/place?key=AIzaSyBXRumEWyF_l3cYf0xrzAWQsFeyUzB-zzA
+                    &q=$office_address'>
+                </iframe>");
+            }
+            ?>
+            </div>
             <div class="about">
                 <?php if($about_agent > ""){echo ("<p>$about_agent</p>");} ?>
             </div>
@@ -149,132 +166,167 @@
         </div>
     </div>
 
-    <!-- ASSETS SECTION -->        
+    <!-- ASSETS SECTION -->   
+    <!-- FOR SALE      -->
     <div class="assets_wrapper">
         <div class="for_sale_title">
             <h1>נכסים למכירה</h1>
         </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
+        <?php 
+            include_once('../loginSystem/db.php');
+            $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email'";
+            $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
+
+            while($card = mysqli_fetch_array($assets_for_sale_run)){
+                if($card['sale_or_rent'] == 'sale'){
+                    $background_path = '../images/title_icon.png';
+                    for($i = 1; $i < 9; $i++){
+                        if($card['file'.$i.'_path']){
+                            $background_path = $card['file'.$i.'_path'];
+                            break;
+                        }
+                    }
+                    $price = "";
+                    $symbol = "";
+                    if($card['price'] > "" and $card['currency'] == 'shekel'){
+                        $price = "מחיר: $card[price] ₪";
+                        $symbol = "₪";
+                    } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                        $price = "מחיר: $card[price] $";
+                        $symbol = "$";
+                    }
+                    echo ("<form action='assets_pages.php' method='POST'>
+                    <div class='asset_card' id=$id style='background-image: url($background_path)'>
+                        <div class='description'>
+                            <h4>$card[street] $card[house_number], $card[city]</h4>
+                            <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                            <span>$price</span>
+                        </div>
+                    </div>
+                    <input type=hidden name=office_name value='$office_name'>
+                    <input type=hidden name=agent_phone value='$phone_number'>
+                    <input type=hidden name=email value='$card[email]'>
+                    <input type=hidden name=post_time value='$card[post_time]'>
+                    <input type=hidden name=agent_directory_path value='$card[agent_directory_path]'>
+                    <input type=hidden name=asset_directory_path  value='$card[asset_directory_path]'>
+                    <input type=hidden name=sale_or_rent value='$card[sale_or_rent]'>
+                    <input type=hidden name=asset_type value='$card[asset_type]'>
+                    <input type=hidden name=asset_condition value='$card[asset_condition]'>
+                    <input type=hidden name=city value='$card[city]'>
+                    <input type=hidden name=street value='$card[street]'>
+                    <input type=hidden name=house_number value='$card[house_number]'>
+                    <input type=hidden name=floor value='$card[floor]'>
+                    <input type=hidden name=max_floor value='$card[max_floor]'>
+                    <input type=hidden name=num_of_rooms value='$card[num_of_rooms]'>
+                    <input type=hidden name=balcony value='$card[balcony]'>
+                    <input type=hidden name=size_in_sm value='$card[size_in_sm]'>
+                    <input type=hidden name=parking_station value='$card[parking_station]'>
+                    <input type=hidden name=entrance_date value='$card[entrance_date]'>
+                    <input type=hidden name=check_boxes value='$card[check_boxes]'>
+                    <input type=hidden name=price value='$card[price]'>
+                    <input type=hidden name=tax value='$card[tax]'>
+                    <input type=hidden name=currency value='$card[currency]'>
+                    <input type=hidden name=symbol value='$symbol'>
+                    <input type=hidden name=asset_description value='$card[asset_description]'>
+                    <input type=hidden name=file1_path value='$card[file1_path]'>
+                    <input type=hidden name=file2_path value='$card[file2_path]'>
+                    <input type=hidden name=file3_path value='$card[file3_path]'>
+                    <input type=hidden name=file4_path value='$card[file4_path]'>
+                    <input type=hidden name=file5_path value='$card[file5_path]'>
+                    <input type=hidden name=file6_path value='$card[file6_path]'>
+                    <input type=hidden name=file7_path value='$card[file7_path]'>
+                    <input type=hidden name=file8_path value='$card[file8_path]'>
+                    </form>");
+                    $id++;
+                }
+            }
+        ?>
+        
+        <!-- <div class="asset_card" style="background-image: url(../images/house1.jpg);">
             <div class="description">
                 <h4>בן אליעזר אריה 45, רמת גן</h4>
                 <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
                 <span>מחיר: 2,840,000 ₪</span>
             </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
-        <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div>
+        </div> -->
     </div>
 
+    <!-- FOR RENT -->
+    <div class="assets_wrapper">
+        <div class="for_sale_title">
+            <h1>נכסים להשכרה</h1>
+        </div>
+        <?php 
+            include_once('../loginSystem/db.php');
+            $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email'";
+            $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
+
+            while($card = mysqli_fetch_array($assets_for_sale_run)){
+                if($card['sale_or_rent'] == 'rent'){
+                    $background_path = '../images/title_icon.png';
+                    for($i = 1; $i < 9; $i++){
+                        if($card['file'.$i.'_path']){
+                            $background_path = $card['file'.$i.'_path'];
+                            break;
+                        }
+                    }
+                    $price = "";
+                    $symbol = "";
+                    if($card['price'] > "" and $card['currency'] == 'shekel'){
+                        $price = "מחיר: $card[price] ₪";
+                        $symbol = "₪";
+                    } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                        $price = "מחיר: $card[price] $";
+                        $symbol = "$";
+                    }
+                    echo ("<form action='assets_pages.php' method='POST'>
+                    <div class='asset_card' id=$id style='background-image: url($background_path)'>
+                        <div class='description'>
+                            <h4>$card[street] $card[house_number], $card[city]</h4>
+                            <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                            <span>$price</span>
+                        </div>
+                    </div>
+                    <input type=hidden name=office_name value='$card[office_name]'>
+                    <input type=hidden name=agent_phone value='$card[agent_phone]'>
+                    <input type=hidden name=email value='$card[email]'>
+                    <input type=hidden name=post_time value='$card[post_time]'>
+                    <input type=hidden name=agent_directory_path value='$card[agent_directory_path]'>
+                    <input type=hidden name=asset_directory_path  value='$card[asset_directory_path]'>
+                    <input type=hidden name=sale_or_rent value='$card[sale_or_rent]'>
+                    <input type=hidden name=asset_type value='$card[asset_type]'>
+                    <input type=hidden name=asset_condition value='$card[asset_condition]'>
+                    <input type=hidden name=city value='$card[city]'>
+                    <input type=hidden name=street value='$card[street]'>
+                    <input type=hidden name=house_number value='$card[house_number]'>
+                    <input type=hidden name=floor value='$card[floor]'>
+                    <input type=hidden name=max_floor value='$card[max_floor]'>
+                    <input type=hidden name=num_of_rooms value='$card[num_of_rooms]'>
+                    <input type=hidden name=balcony value='$card[balcony]'>
+                    <input type=hidden name=size_in_sm value='$card[size_in_sm]'>
+                    <input type=hidden name=parking_station value='$card[parking_station]'>
+                    <input type=hidden name=entrance_date value='$card[entrance_date]'>
+                    <input type=hidden name=check_boxes value='$card[check_boxes]'>
+                    <input type=hidden name=price value='$card[price]'>
+                    <input type=hidden name=tax value='$card[tax]'>
+                    <input type=hidden name=currency value='$card[currency]'>
+                    <input type=hidden name=symbol value='$symbol'>
+                    <input type=hidden name=asset_description value='$card[asset_description]'>
+                    <input type=hidden name=file1_path value='$card[file1_path]'>
+                    <input type=hidden name=file2_path value='$card[file2_path]'>
+                    <input type=hidden name=file3_path value='$card[file3_path]'>
+                    <input type=hidden name=file4_path value='$card[file4_path]'>
+                    <input type=hidden name=file5_path value='$card[file5_path]'>
+                    <input type=hidden name=file6_path value='$card[file6_path]'>
+                    <input type=hidden name=file7_path value='$card[file7_path]'>
+                    <input type=hidden name=file8_path value='$card[file8_path]'>
+                    </form>");
+                    $id++;
+                }
+                
+            }
+        ?>
+    </div>
 
     <!-- FOOTER SECTION -->
     <div class="footer-container">
@@ -354,6 +406,17 @@
             show_picture.style.height = "0";
             show_picture_img_element.src = "";
         }
+        
+        // Set div's onclick = submit closest form
+        var cards = Array(<?php echo $id ?>);
+        for(var i = 0; i < cards.length; i++){
+            cards[i] = document.getElementById(i);
+            cards[i].onclick = function(){
+                this.closest("form").submit();
+                return false;
+            }
+        }
+        
     </script>
 </body>
 </html>

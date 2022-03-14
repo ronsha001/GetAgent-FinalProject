@@ -183,6 +183,12 @@
     align-items: center;
     text-align: center;
 }
+.show_picture img{
+    height: 50%;
+}
+.map iframe{
+    border-radius: 3px;
+}
 
 @media screen and (max-width: 1200px) {
     .info_wrapper{

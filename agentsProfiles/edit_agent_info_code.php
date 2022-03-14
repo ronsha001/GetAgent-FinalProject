@@ -75,7 +75,11 @@
             $id = $result['id'];
 
             try{
-                $update_agent_info = "UPDATE agents_info_table SET agent_cities='$agent_cities', phone_number='$phone_number', birth_date='$birth_date', website_link='$website_link', office_address='$office_address', years_of_exp='$years_of_exp', about_agent='$about_agent', office_name='$office_name', license_year='$license_year' WHERE verify_token='$token' AND email='$email' AND id='$id' LIMIT 1";
+                if($about_agent > ""){
+                    $update_agent_info = "UPDATE agents_info_table SET agent_cities='$agent_cities', phone_number='$phone_number', birth_date='$birth_date', website_link='$website_link', office_address='$office_address', years_of_exp='$years_of_exp', about_agent='$about_agent', office_name='$office_name', license_year='$license_year' WHERE verify_token='$token' AND email='$email' AND id='$id' LIMIT 1";
+                } else {
+                $update_agent_info = "UPDATE agents_info_table SET agent_cities='$agent_cities', phone_number='$phone_number', birth_date='$birth_date', website_link='$website_link', office_address='$office_address', years_of_exp='$years_of_exp', office_name='$office_name', license_year='$license_year' WHERE verify_token='$token' AND email='$email' AND id='$id' LIMIT 1";
+                }
                 $update_agent_info_run = mysqli_query($con, $update_agent_info);
             } catch(Exception $e) {
                 mysqli_close($con);

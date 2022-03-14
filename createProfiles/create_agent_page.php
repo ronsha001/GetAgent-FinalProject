@@ -166,7 +166,7 @@
             <div class="new_btn_container">
                 <div class="form">
                     <input type="text" name="office_address" class="form__input" autocomplete="off">
-                    <label class="form__label">כתובת משרד</label>
+                    <label class="form__label">כתובת משרד (רחוב מספר, עיר)</label>
                 </div>
             </div>
 
@@ -177,29 +177,54 @@
                 </div>
             </div>
             
-            <div class="description">
+            <!-- <div class="description">
                 <textarea name="about_agent" id="about_agent" class="about_agent" placeholder="תיאור כללי, מומלץ להסביר באופן חופשי את המומחיות שלך, הניסיון שלך, שיטת מכירה וכו..."></textarea>
+            </div> -->
+
+            <!-- The toolbar will be rendered in this container. -->
+            <div id="toolbar-container"></div>
+
+            <!-- This container will become the editable. -->
+            <div id="description">
+                <p id="about_agent_p"></p>
             </div>
+            <input type="hidden" name="about_agent" id="about_agent">
             
 
             <input type="submit" name="submit" id="submit" value="פתח פרופיל">
         </form>
     </div>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/decoupled-document/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script> -->
     <script src="city_tags.js" type="text/javascript"></script>
     <script src="MaxDate.js" type="text/javascript"></script>
     <script>
-        ClassicEditor
-            .create( document.querySelector( '#about_agent' ) )
-            .catch( error => {
-                console.error( error );
-            } );
+        // ClassicEditor
+        //     .create( document.querySelector( '#about_agent' ) )
+        //     .catch( error => {
+        //         console.error( error );
+        //     } );
 
 
         const my_logo = document.getElementById("my_logo"),
         image_preview_container = document.getElementById("image_preview_container"),
         image_preview__image = image_preview_container.querySelector(".image_preview__image"),
         previewDefaultText = image_preview_container.querySelector(".image_preview__default_text");
+
+        DecoupledEditor
+            .create( document.querySelector( '#description' ) )
+            .then( editor => {
+                const toolbarContainer = document.querySelector( '#toolbar-container' );
+
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+
+                editor.model.document.on('change:data', (evt, data) => {
+                    about_agent.value = editor.getData();
+                });
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
     
         my_logo.addEventListener("change", function() {
             const file = this.files[0];

@@ -166,7 +166,7 @@
             <div class="new_btn_container">
                 <div class="form">
                     <input type="text" name="office_address" value="<?php echo $office_address; ?>" class="form__input" autocomplete="off">
-                    <label class="form__label">כתובת משרד</label>
+                    <label class="form__label">כתובת משרד (רחוב מספר, עיר)</label>
                 </div>
             </div>
 
@@ -177,24 +177,35 @@
                 </div>
             </div>
             
-            <div class="description">
-                <textarea name="about_agent" id="about_agent" class="about_agent" placeholder="תיאור כללי, מומלץ להסביר באופן חופשי את המומחיות שלך, הניסיון שלך, שיטת מכירה וכו...">df</textarea>
+            <!-- <div class="description">
+                <textarea name="about_agent" id="about_agent"  class="about_agent" placeholder="תיאור כללי, מומלץ להסביר באופן חופשי את המומחיות שלך, הניסיון שלך, שיטת מכירה וכו...">df</textarea>
+            </div> -->
+
+            <!-- The toolbar will be rendered in this container. -->
+            <div id="toolbar-container"></div>
+
+            <!-- This container will become the editable. -->
+            <div id="description">
+                <p id="about_agent_p"></p>
             </div>
-            
+            <input type="hidden" name="about_agent" id="about_agent">
 
             <input type="submit" name="submit" id="submit" value="ערוך פרופיל">
         </form>
     </div>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/decoupled-document/ckeditor.js"></script>
+    <!-- <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script> -->
     <script src="../createProfiles/city_tags.js" type="text/javascript"></script>
     <script src="../createProfiles/MaxDate.js" type="text/javascript"></script>
     <script>
 
-        ClassicEditor
-            .create( document.querySelector( '#about_agent' ) )
-            .catch( error => {
-                console.error( error );
-            } );
+        // ClassicEditor
+        //     .create( document.querySelector( '#about_agent' ) )
+        //     .catch( error => {
+        //         console.error( error );
+        //     } );
+
+        
         
         
         const ul2 = document.getElementById("ul"),
@@ -202,13 +213,30 @@
         countTags2 = document.getElementById("countTag"),
         agent_cities2 = document.getElementById("agent_cities"),
         submitBtn2 = document.getElementById("submit"),
+        about_agent_p = document.getElementById("about_agent_p"),
+        description = document.getElementById("description"),
         about_agent = document.getElementById("about_agent");
 
         var cities_arr = <?php echo json_encode($cities_arr); ?>;
-        about_agent.value = <?php echo json_encode($about_agent); ?>;
+        about_agent_p.innerHTML = <?php echo json_encode($about_agent); ?>;
+        
 
+        DecoupledEditor
+            .create( document.querySelector( '#description' ) )
+            .then( editor => {
+                const toolbarContainer = document.querySelector( '#toolbar-container' );
 
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
 
+                editor.model.document.on('change:data', (evt, data) => {
+                    about_agent.value = editor.getData();
+                });
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+
+        
         function push_chosen_cities(already_chosen_cities){
             for(var city = 0; city < already_chosen_cities.length; city++){    
                 if(cities.length < 10) { // if tags length is less than 10 then only add city

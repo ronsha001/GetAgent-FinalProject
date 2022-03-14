@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200&family=Fredoka:wght@300&family=Poppins:wght@200;300;400&display=swap');
+/* .main_container{
+    display: flex;
+    flex-direction: column;
+} */
+.asset_wrapper{
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+.asset_container{
+    height: fit-content;
+    width: 50%;
+    overflow-x: hidden;
+}
+
+
+
+/* ******IMAGES******** */
+.images_container{
+    height: 49%;
+    overflow: hidden;
+    position: relative;
+}
+.images_container .images{
+    height: 100%;
+    width: 100%;
+}
+.images img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.btn_sliders{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    display: flex;
+    transform: translateX(-50%);
+}
+.btn_sliders span{
+    height: 15px;
+    width: 50px;
+    border: 2px solid #242424;
+    margin: 0 3px;
+    cursor: pointer;
+    transition: .3s;
+}
+.btn_sliders span:hover{
+    transition: .3s;
+}
+.images_container .slide{
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    border: 2px solid #242424;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+}
+.images_container .slide:hover{
+    background: rgba(255,255,255,0.2);
+}
+.slide span{
+    font-size: 35px;
+    color: #242424;
+    line-height: 41px;
+}
+.images_container .right{
+    right: 0;
+}
+.images_container .left{
+    left: 0;
+}
+
+/* ******ADDRESS AND PRICE******** */
+.details_container{
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'Assistant', sans-serif;
+}
+.address_and_price{
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.address_and_price h1, h2, h3{
+    margin: 5px;
+}
+
+/* *****ASSET DETAILS******** */
+.asset_details{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.asset_details .details{
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+.asset_details .details span{
+    height: 14px;
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.asset_details .details i{
+    margin-left: 5px;
+    color: #474747;
+}
+.asset_details .details span::after{
+    content: "";
+    display: inline-block;
+    height: 14px;
+    margin: 0px 16px;
+    width: 1px;
+    background: rgb(211, 211, 211);
+
+}
+.asset_details .details span:last-child::after{
+    display: none;
+    height: 14px;
+    margin: 0px 16px;
+    width: 1px;
+    background: rgb(211, 211, 211);
+}
+.asset_description{
+    height: fit-content;
+    margin-top: 30px;
+}
+
+.asset_description p{
+    margin-top: 5px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+/* ****** CONTACT INFO ******** */
+.contact_wrapper{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+.contact_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: solid 1px #ececec;
+    box-shadow: 0 4px 12px 0 rgb(0 0 0 / 10%);
+}
+.contact_container .agent_details{
+    border-bottom: 1px solid #d3d3d3;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 17px;
+    font-weight: bold;
+    font-size: 25px;
+    align-items: center;
+}
+
+.agent_details .icon_name i{
+    margin: 10px;
+    font-size: 45px;
+    color: #ff9001;
+}
+.agent_details .icon_name{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.agent_details .agent_phone{
+    padding: 7px 20px;
+    border: 1px solid #d3d3d3;
+    border-radius: 20px;
+    margin: 10px;
+    font-size: 20px;
+    color: #ff9001;
+}
+.contact_container .user_details{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px 17px;
+    font-weight: bold;
+    font-size: 25px;
+    align-items: center;
+}
+.user_details form{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.user_details .user_phone{
+    width: 40%;
+    padding: 12px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: 1px solid #d3d3d3;
+}
+.user_details .contact_submit{
+    border: none;
+    color: white;
+    background-color: #ff9001;
+    width: 40%;
+    font-size: 20px;
+    text-size-adjust: auto;
+    font-weight: 500;
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+/* ASSET SPECIFICATION */
+.asset_specific{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Assistant', sans-serif;
+    width: 50%;
+    margin: 30px 30px 0 0;
+
+    padding: 20px;
+}
+.asset_specific h2{
+    font-weight: bold;
+}
+.asset_specific .specific{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 5px;
+    font-size: large;
+    float: right;
+}
+.specific span{
+    width: 50%
+}
+
+.specific i {
+    margin: 0 7px;
+    color: green;
+}
+
+.asset_container .last_details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Assistant', sans-serif;
+    font-size: 19px;
+    font-weight: 900;
+    width: 100%;
+}
+.last_details .last_d{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+}
+.last_d span{
+    margin: 10px;
+    width: 40%;
+    display: flex;
+}
+.last_d i{
+    font-size: 10px;
+    transform: translateY(37%);
+    margin-left: 7px;
+    color: #242424;
+}
+
+
+
+/* ****** MAP ******** */
+
+.map_container{
+    max-height: 100vh;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.asset_wrapper .map_container{
+    position: sticky;
+    top: 0;
+}
+.map{
+    height: 100%;
+}
+.map iframe{
+    height: 100%;
+}
+
+@media only screen and (max-width:1150px) {
+    .user_details .contact_submit{
+        
+        font-size: 15px;
+        
+    }
+}
+@media only screen and (max-width:980px) {
+    .asset_wrapper{
+        flex-direction: column;
+        height: fit-content;
+    }
+    .asset_container{
+        width: 100%;
+        height: fit-content;
+        overflow-y: hidden;
+    }
+    .map_container{
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+@media only screen and (max-width:440px) {
+    .asset_specific{
+        width: 70%;
+    }
+    .agent_details span {
+        font-size: 15px;
+    }
+    .agent_details .icon_name i{
+        font-size: 30px;
+    }
+
+    .agent_details .agent_phone{
+        display: flex;
+        font-size: 15px;
+        padding: 7px 13px;
+    }
+    .agent_details .agent_phone * {
+        margin: 3px;
+    }
+    .user_details{
+        justify-content: center;
+    }
+    .user_details .user_phone{
+        font-size: 15px;
+        padding: 8px 12px;
+        width: 35%;
+    }
+    .user_details .contact_submit{
+        height: 35px;
+        width: 50%;
+        padding: 0 12px;
+        font-size: 15px;
+    }
+    .last_details .last_d{
+        width: 100%;
+        margin-right: 35px;
+    }
+    .last_d span{
+        margin: 2px;
+        width: 50%;
+    }
+    .asset_container .last_details{
+        
+        font-size: 17px;
+    }
+}
