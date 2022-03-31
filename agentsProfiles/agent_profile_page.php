@@ -89,7 +89,7 @@
             </div>        
         </nav>
         <script src="../Nav.js" type="text/javascript"></script>
-    
+        
     <!-- INFO SECTION -->
     <div class="info_wrapper">
         <div class="info">
@@ -252,7 +252,7 @@
     </div>
 
     <!-- FOR RENT -->
-    <div class="assets_wrapper">
+    <div class="assets_wrapper" style="background: #f5f5f5;">
         <div class="for_sale_title">
             <h1>נכסים להשכרה</h1>
         </div>
@@ -368,7 +368,7 @@
                     <a href="#">חיפוש סוכנים</a>
                     <a href="#">חיפוש סוכנויות</a>
                     <a href="#">חיפוש נכסים</a>
-                    <a href="#">חיפוש נכסים שנמכרו/הושכרו</a>
+                    <a href="#">נכסים שנמכרו/הושכרו</a>
                 </div>
             </div>
         </div>

@@ -12,7 +12,21 @@
         if (isset($_SESSION['status']) and !empty($_SESSION['status'])){
             $value = $_SESSION['status'];
             $type = 'text';
-        } 
+        }
+        
+        
+        $filename = "../cities.txt";
+        $file = fopen( $filename, "r" );
+        
+        if( $file == false ) {
+            echo ( "Error in opening file" );
+            exit();
+        }
+        
+        $filesize = filesize( $filename );
+        $filetext = fread( $file, $filesize );
+
+
     } else {
         header("Location: ../loginSystem/login_page.php");
         exit();
@@ -196,14 +210,9 @@
     </div>
     <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/decoupled-document/ckeditor.js"></script>
     <!-- <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script> -->
-    <script src="city_tags.js" type="text/javascript"></script>
+    <!-- <script src="city_tags.js" type="text/javascript"></script> -->
     <script src="MaxDate.js" type="text/javascript"></script>
     <script>
-        // ClassicEditor
-        //     .create( document.querySelector( '#about_agent' ) )
-        //     .catch( error => {
-        //         console.error( error );
-        //     } );
 
 
         const my_logo = document.getElementById("my_logo"),
@@ -248,6 +257,135 @@
             }
         });
 
+
+
+        const ul = document.getElementById("ul"),
+        input = document.getElementById("input"),
+        countTags = document.getElementById("countTag"),
+        agent_cities = document.getElementById("agent_cities"),
+        submitBtn = document.getElementById("submit");
+
+        submitBtn.disabled = true;
+
+        const maxTags = 10;
+        var cities = [];
+        var cities_options = document.getElementById('cities');
+
+        
+        var options = <?php echo json_encode($filetext); ?>;
+        options = options.split("\n");
+        for(var i = 0; i < options.length; i++){
+            options[i] = options[i].substr(0, options[i].length-1);
+        }
+
+        
+        function countTag(){
+            input.focus();
+            countTags.innerText = maxTags - cities.length; // subtracting max value with tags length
+        }
+
+        function createTag(){
+            // removing all li tags before adding so there will be no duplicates tags
+            ul.querySelectorAll("li").forEach(li => li.remove());
+
+            cities.slice().reverse().forEach(city => {
+                var liCity = `<li id="li" style="font-family:sans-serif;"><i class="uit uit-multiply" onclick="remove(this, '${city}')"></i> ${city}</li>`;
+                ul.insertAdjacentHTML("afterbegin", liCity); // inserting or adding li inside ul tag
+            })
+        }
+
+        function remove(element, tag){
+            var index = cities.indexOf(tag); // getting removing tag index
+            cities = [...cities.slice(0, index), ...cities.slice(index + 1)]; // removing or excluding selected tag from an array
+            element.parentElement.remove(); // removing li of removed tag
+            agent_cities.value = cities;
+            if (agent_cities.value.length < 1){
+                submitBtn.disabled = true;
+                ul.style.border = '2px solid #ff3030';
+            } else {
+                submitBtn.disabled = false;
+                ul.style.border = '2px solid #ff9001';
+            }
+            
+            countTag();
+        }
+
+        function addTag(e){
+            if(e.key == "Enter"){
+                var city = e.target.value.replace(/\s+/g, ' ').trim(); // removing unwanted spaces from user city
+                if(city.length > 1 && !cities.includes(city)){ // if city length is greater than 1 and the city isn't exist already
+                    if(cities.length < 10) { // if tags length is less than 10 then only add city
+                        //city.split(',').forEach(city => { // splitting each city from comma (,)
+                        if(options.includes(city)){
+                            cities.push(city); // adding each city inside array
+                            agent_cities.value = cities;
+                            submitBtn.disabled = false;
+                            ul.style.border = '2px solid #ff9001';
+                            createTag();
+                        }    
+                        
+                        //});
+                    }
+                }
+                countTag();
+                e.target.value = "";
+            }
+        }
+
+        input.addEventListener("keyup", addTag);
+
+        const insertBtn = document.getElementById("insert_btn");
+        insertBtn.addEventListener("click", () => {
+            // cities.length = 0; // making array empty
+            // agent_cities.value = cities;
+            // ul.querySelectorAll("li").forEach(li => li.remove()); // removing all li tags
+            // countTag();
+            var city = input.value.replace(/\s+/g, ' ').trim(); // removing unwanted spaces from user city
+            if(city.length > 1 && !cities.includes(city)){ // if city length is greater than 1 and the city isn't exist already
+                if(cities.length < 10) { // if tags length is less than 10 then only add city
+                    //city.split(',').forEach(city => { // splitting each city from comma (,)
+                    if(options.includes(city)){
+                        cities.push(city); // adding each city inside array
+                        agent_cities.value = cities;
+                        submitBtn.disabled = false;
+                        ul.style.border = '2px solid #ff9001';
+                        createTag();
+                    }    
+                        
+                    //});
+                }
+            }
+            countTag();
+            input.value = "";
+        });
+
+
+
+        options.forEach(function(item){ // for each variable in options array
+            var option = document.createElement('option'); // create new option element
+            option.value = item; // assign to the new element the variable from options array
+            cities_options.appendChild(option); // append new option in cities (datalist)
+        });
+
+        function push_chosen_cities(already_chosen_cities){
+            already_chosen_cities.forEach(city => function(){
+                if(cities.length < 10) { // if tags length is less than 10 then only add city
+                    //city.split(',').forEach(city => { // splitting each city from comma (,)
+                    if(options.includes(city)){
+                        cities.push(city); // adding each city inside array
+                        agent_cities.value = cities;
+                        submitBtn.disabled = false;
+                        ul.style.border = '2px solid #ff9001';
+                        createTag();
+                    }    
+                    
+                    //});
+                }
+                countTag();
+                e.target.value = "";
+            });
+            
+        }
     </script>
 </body>
 </html>

@@ -6,6 +6,21 @@
         $value = $_SESSION['status'];
         $type = 'text';
     }
+
+    
+
+    $filename = "../cities.txt";
+    $file = fopen( $filename, "r" );
+    
+    if( $file == false ) {
+        echo ( "Error in opening file" );
+        exit();
+    }
+    
+    $filesize = filesize( $filename );
+    $filetext = fread( $file, $filesize );
+
+    
 ?>
 <html lang="en">
 <head>
@@ -44,16 +59,6 @@
                     <input type="text" name="last_name" autocomplete="off" required>
                     <span></span>
                     <label>שם משפחה</label>
-                </div>
-                <div class="txt_field">
-                    <input type="text" name="address" autocomplete="off" required>
-                    <span></span>
-                    <label>כתובת</label>
-                </div>
-                <div class="txt_field">
-                    <input type="text" name="city" autocomplete="off" required>
-                    <span></span>
-                    <label>עיר</label>
                 </div>
                 <div class="txt_field">
                     <input type="password" name="password" autocomplete="off" required>

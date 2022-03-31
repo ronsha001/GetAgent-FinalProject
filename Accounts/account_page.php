@@ -6,19 +6,20 @@
     $picture_path = '';
     $agent_link = '../loginSystem/login_page.php';
     $agent_profile = '<i class="fa-solid fa-plus"></i> צור פרופיל סוכן';
+    $agent_profile_footer = 'צור פרופיל סוכן';
     $agency_profile = 'צור פרופיל סוכנות';
     if (isset($_SESSION['verify_token'])){
         $email = $_SESSION['email'];
         $first_name = $_SESSION['first_name'];
         $last_name = $_SESSION['last_name'];
         $gender = $_SESSION['gender'];
-        $address = $_SESSION['address'].', '.$_SESSION['city'];;
         $isRegistered = true;
         $picture_path = $_SESSION['picture_path'];
         $agent_link = '../createProfiles/create_agent_page.php';
         if ($_SESSION['is_agent'] == 1) {
             $agent_link = '../agentsProfiles/agent_profile_page.php'; // TODO create agent page
             $agent_profile = 'פרופיל הסוכן שלי';
+            $agent_profile_footer = 'פרופיל הסוכן שלי';
         } 
         if ($_SESSION['is_agency'] == 1) {
             $agency_profile = 'פרופיל הסוכנות שלי';
@@ -85,7 +86,6 @@
                 <li><span>שם: </span><?php echo $first_name ?></li>
                 <li><span>שם משפחה: </span><?php echo $last_name ?></li>
                 <li><span>מין: </span><?php echo $gender ?></li>
-                <li><span>כתובת: </span><?php echo $address ?></li>
                 <li><span>אימייל: </span><?php echo $email ?></li>
                 <br>
                 <div class="social">
@@ -142,7 +142,7 @@
                 <div class="footer-link-items">
                     <h2>חשבון</h2>
                     <?php if(!$isRegistered){echo "<a href='../loginSystem/login_page.php'>התחבר</a>";}else{echo "<a href='../Accounts/account_page.php'>החשבון שלי</a>";} ?>
-                    <a href="<?php echo $agent_link; ?>"> <?php echo $agent_profile; ?> </a>
+                    <a href="<?php echo $agent_link; ?>"> <?php echo $agent_profile_footer; ?> </a>
                     <a href="#"> <?php echo $agency_profile; ?> </a>
                 </div>
                 <div class="footer-link-items">
@@ -150,7 +150,7 @@
                     <a href="#">חיפוש סוכנים</a>
                     <a href="#">חיפוש סוכנויות</a>
                     <a href="#">חיפוש נכסים</a>
-                    <a href="#">חיפוש נכסים שנמכרו/הושכרו</a>
+                    <a href="#">נכסים שנמכרו/הושכרו</a>
                 </div>
             </div>
         </div>

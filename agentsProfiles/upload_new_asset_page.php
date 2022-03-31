@@ -14,6 +14,21 @@
         $value = $_SESSION['status'];
         $type = 'text';
     }
+
+    
+
+    $filename = "../cities.txt";
+    $file = fopen( $filename, "r" );
+    
+    if( $file == false ) {
+        echo ( "Error in opening file" );
+        exit();
+    }
+    
+    $filesize = filesize( $filename );
+    $filetext = fread( $file, $filesize );
+
+    
     
 ?>
 <!DOCTYPE html>
@@ -90,7 +105,7 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>סטטוס הנכס:</label>
+                            <label for="sale_or_rent">סטטוס הנכס:</label>
                         </div>
                         <select name="sale_or_rent" id="sale_or_rent" required>
                             <option value="" selected="true" disabled="disabled">בחר סטטוס</option>
@@ -102,7 +117,7 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>סוג הנכס:</label>
+                            <label for="asset_type">סוג הנכס:</label>
                         </div>
                         <select name="asset_type" id="asset_type" required>
                             <option value="" selected="true" disabled="disabled">בחר סוג נכס</option>
@@ -132,7 +147,7 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>מצב הנכס:</label>
+                            <label for="asset_condition">מצב הנכס:</label>
                         </div>
                         <select name="asset_condition" id="asset_condition" required>
                             <option value="" selected="true" disabled="disabled">מצב הנכס:</option>
@@ -147,7 +162,7 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>ישוב:</label>
+                            <label for="city">ישוב:</label>
                         </div>
                         <input type="text" list="cities" name="city" id="city" autocomplete="off" placeholder="בחר ישוב" required>
                             <datalist id="cities">
@@ -160,47 +175,47 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>רחוב:</label>
+                            <label for="street">רחוב:</label>
                         </div>
-                        <input type="text" name="street" required>
+                        <input type="text" name="street" id="street" required>
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
                             <label for="house_number">מס' בית:</label>
                         </div>
-                        <input type="number" name="house_number" min="1">
+                        <input type="number" name="house_number" id="house_number" min="1">
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>קומה:</label>
+                            <label for="floor">קומה:</label>
                         </div>
-                        <input type="number" name="floor" min="0" placeholder="עבור קומת קרקע יש להזין 0" required>
+                        <input type="number" name="floor" id="floor" min="0" placeholder="עבור קומת קרקע יש להזין 0" required>
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>מתוך קומות:</label>
+                            <label for="max_floor">מתוך קומות:</label>
                         </div>
-                        <input type="number" name="max_floor" min="0" required>
+                        <input type="number" name="max_floor" id="max_floor" min="0" required>
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>מס' חדרים:</label>
+                            <label for="num_of_rooms">מס' חדרים:</label>
                         </div>
-                        <input type="number" name="num_of_rooms" min="1" step="0.5" required>
+                        <input type="number" name="num_of_rooms" id="num_of_rooms" min="1" step="0.5" required>
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
-                            <label>מרפסת:</label>
+                            <label for="balcony">מרפסת:</label>
                         </div>
-                        <select name="balcony">
+                        <select name="balcony" id="balcony">
                             <option selected value="none">ללא</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -211,16 +226,16 @@
                     <div class="select_info">
                         <div class="labels">
                             <label class="required_label">*</label>
-                            <label>גודל במ"ר:</label>
+                            <label for="size_in_sm">גודל במ"ר:</label>
                         </div>
-                        <input type="number" name="size_in_sm" min="1" required>
+                        <input type="number" name="size_in_sm" id="size_in_sm" min="1" required>
                     </div>
 
                     <div class="select_info">
                         <div class="labels">
-                            <label>חניה:</label>
+                            <label for="parking_station">חניה:</label>
                         </div>
-                        <select name="parking_station">
+                        <select name="parking_station" id="parking_station">
                             <option selected value="none">ללא</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -231,7 +246,7 @@
                     <div class="select_info">
                         <div class="labels">
                         <label class="required_label">*</label>
-                        <label>תאריך כניסה:</label>
+                        <label for="entrance_date">תאריך כניסה:</label>
                         </div>
                         <input type="date" name="entrance_date" id="entrance_date" required>
 
@@ -244,72 +259,72 @@
 
                     <div class="checkboxes_wrapper">
                         <div class="checkbox">
-                            <input type="checkbox" name="air_condition">
+                            <input type="checkbox" name="air_condition" id="air_condition">
                             <div class="labels">
-                                <label>מיזוג</label>
+                                <label for="air_condition">מיזוג</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="bars">
+                            <input type="checkbox" name="bars" id="bars">
                             <div class="labels">
-                                <label>סורגים</label>
+                                <label for="bars">סורגים</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="elevator">
+                            <input type="checkbox" name="elevator" id="elevator">
                             <div class="labels">
-                                <label>מעלית</label>
+                                <label for="elevator">מעלית</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="cosher_kitchen">
+                            <input type="checkbox" name="cosher_kitchen" id="cosher_kitchen">
                             <div class="labels">
-                                <label>מטבח כשר</label>
+                                <label for="cosher_kitchen">מטבח כשר</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="access_for_disabled">
+                            <input type="checkbox" name="access_for_disabled" id="access_for_disabled">
                             <div class="labels">
-                                <label>גישה לנכים</label>
+                                <label for="access_for_disabled">גישה לנכים</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="protected_space">
+                            <input type="checkbox" name="protected_space" id="protected_space">
                             <div class="labels">
-                                <label>ממ"ד</label>
+                                <label for="protected_space">ממ"ד</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="renovated">
+                            <input type="checkbox" name="renovated" id="renovated">
                             <div class="labels">
-                                <label>משופצת</label>
+                                <label for="renovated">משופצת</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="storage">
+                            <input type="checkbox" name="storage" id="storage">
                             <div class="labels">
-                                <label>מחסן</label>
+                                <label for="storage">מחסן</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="tadiran_ac">
+                            <input type="checkbox" name="tadiran_ac" id="tadiran_ac">
                             <div class="labels">
-                                <label>מזגן תדיראן</label>
+                                <label for="tadiran_ac">מזגן תדיראן</label>
                             </div>
                         </div>
 
                         <div class="checkbox">
-                            <input type="checkbox" name="furniture">
+                            <input type="checkbox" name="furniture" id="furniture">
                             <div class="labels">
-                                <label>ריהוט</label>
+                                <label for="furniture">ריהוט</label>
                             </div>
                         </div>
 
@@ -319,7 +334,7 @@
                         <div class="price_wrapper">
 
                             <div class="labels">
-                                <label>מחיר:</label>
+                                <label for="price">מחיר:</label>
                             </div>
                             <div class="price">
                                 <input type="text" name="price" id="price"/>
@@ -333,7 +348,7 @@
                         <div class="price_wrapper">
 
                             <div class="labels">
-                                <label>ארנונה:</label>
+                                <label for="tax">ארנונה:</label>
                             </div>
                             <div class="price">
                                 <input type="text" name="tax" id="tax"/>
@@ -499,12 +514,27 @@
             </div>
         </form>
         <script src="Date.js" type="text/javascript"></script>
-        <script src="Cities.js" type="text/javascript"></script>
+        <!-- <script src="Cities.js" type="text/javascript"></script> -->
         <script src="PriceSeparator.js" type="text/javascript"></script>
         <script>
 
             var submitBtn = document.getElementById('submit');
             var cityInput = document.getElementById('city');
+
+            var cities = <?php echo json_encode($filetext); ?>;
+            cities = cities.split("\n");
+            for(var i = 0; i < cities.length; i++){
+                cities[i] = cities[i].substr(0, cities[i].length-1);
+            }
+
+            var list = document.getElementById('cities');
+            var option;
+            cities.forEach(function(item){
+                option = document.createElement('option');
+                option.value = item;
+                list.appendChild(option);
+            });
+
             document.getElementById('myForm').onsubmit = function() {
                 return isValidForm();
             }

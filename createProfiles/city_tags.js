@@ -1502,7 +1502,7 @@ function createTag(){
     ul.querySelectorAll("li").forEach(li => li.remove());
 
     cities.slice().reverse().forEach(city => {
-        var liCity = `<li id="li"><i class="uit uit-multiply" onclick="remove(this, '${city}')"></i> ${city}</li>`;
+        var liCity = `<li id="li" style="font-family:sans-serif;"><i class="uit uit-multiply" onclick="remove(this, '${city}')"></i> ${city}</li>`;
         ul.insertAdjacentHTML("afterbegin", liCity); // inserting or adding li inside ul tag
     })
 }

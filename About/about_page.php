@@ -2,7 +2,7 @@
     $isRegistered = false;
     $agent_profile = 'צור פרופיל סוכן';
     $agency_profile = 'צור פרופיל סוכנות';
-    $agent_link = 'loginSystem/login_page.php';
+    $agent_link = '../loginSystem/login_page.php';
     $login_or_logout = '';
     $loginLink_or_logoutLink = '';
     $first_name = 'אורח';
@@ -84,7 +84,7 @@
                     <h4>האתר עובד במתכונת הבאה:</h4>
                     <p>על מנת להשאיר חוות דעת על סוכנות/סוכנות - חובה להתחבר לחשבון האישי.<br>על מנת לפתוח פרופיל סוכן - חובה להתחבר לחשבון האישי.<br>על מנת לפתוח פרופיל סוכנות - חובה להתחבר לחשבון האישי.<br>על מנת לפרסם נכסים - חובה לפתוח פרופיל סוכן/סוכנות.</p>
                     <div class="button">
-                        <a href="https://github.com/ronsha001/Ron-s-Projects" target="_blank">קוד האתר</a>
+                        <a href="https://github.com/ronsha001/GetAgent-FinalProject.git" target="_blank">קוד האתר</a>
                     </div>
                 </div>
                 <div class="social">
@@ -139,7 +139,7 @@
                     <a href="#">חיפוש סוכנים</a>
                     <a href="#">חיפוש סוכנויות</a>
                     <a href="#">חיפוש נכסים</a>
-                    <a href="#">חיפוש נכסים שנמכרו/הושכרו</a>
+                    <a href="#">נכסים שנמכרו/הושכרו</a>
                 </div>
             </div>
         </div>

@@ -6,15 +6,29 @@
             $folder_path = $_SESSION['folder_path'];
             $old_logo_path = $_SESSION['logo_path'];
             $file = $_FILES['my_logo'];
-            $agent_cities = $_POST['agent_cities'];
-            $phone_number = $_POST['phone_number'];
-            $birth_date = $_POST['birth_date'];
-            $website_link = $_POST['website_link'];
-            $office_address = $_POST['office_address'];
-            $years_of_exp = $_POST['years_of_exp'];
-            $about_agent = $_POST['about_agent'];
-            $office_name = $_POST['office_name'];
-            $license_year = $_POST['license_year'];
+            $agent_cities = trim($_POST['agent_cities']);
+            $phone_number = trim($_POST['phone_number']);
+            $birth_date = trim($_POST['birth_date']);
+            $website_link = trim($_POST['website_link']);
+            $office_address = trim($_POST['office_address']);
+            $years_of_exp = trim($_POST['years_of_exp']);
+            $about_agent2 = trim($_POST['about_agent']);
+            $about_agent = "";
+            $right = "";
+            for($i = 0, $j = strlen($about_agent2)-1; $i < $j; $i++, $j--){
+                if($about_agent2[$i] == '\''){
+                    $about_agent = $about_agent . '\'';
+                }
+                if($about_agent2[$j] == '\''){
+                    $right = '\'' . $right;
+                }
+                $about_agent = $about_agent. $about_agent2[$i];
+                $right = $about_agent2[$j] . $right;
+            }
+            $about_agent = $about_agent . $right;
+
+            $office_name = trim($_POST['office_name']);
+            $license_year = trim($_POST['license_year']);
 
             $images_folder_path ="$folder_path./images";
             $fileDestination = "";

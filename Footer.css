@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200&family=Fredoka:wght@300&family=Poppins:wght@200;300;400&display=swap');
+
 .footer-container {
     direction: rtl;
     background-color: #242424;
@@ -64,6 +66,7 @@
     max-width: 1000px;
     display: flex;
     justify-content: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .footer-link-wrapper {
@@ -89,13 +92,14 @@
 }
 
 .footer-link-items a {
-    color: #fff;
+    color: #fff;    
     text-decoration: none;
     margin-bottom: 8px;
+    transition: 0.2s ease-out;
 }
 
 .footer-link-items a:hover {
-    color: #e9e9e9;
+    color: #ff9001;
     transition: 0.3s ease-out;
 }
 
@@ -153,6 +157,7 @@
 .website-rights {
     color: #fff;
     margin-bottom: 16px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 @media screen and (max-width: 940px) {

@@ -16,14 +16,18 @@
         $account_details = mysqli_fetch_array($is_account_run);
         
         if ($rows === 1) {
+            if( md5( md5( sha1($account_details['email']) ) ) == $account_details['verify_token'] or empty($account_details['verify_token'])){
+                $_SESSION['color'] = '#ff2525';
+                $_SESSION['status'] = "בבקשה אמת את חשבונך באמצעות המייל שנשלח אליך.";
+                header("Location: login_page.php");
+                exit();
+            }
             $_SESSION['email'] = $account_details['email'];
             $_SESSION['time'] = $account_details['time'];
             $_SESSION['verify_token'] = $account_details['verify_token'];
             $_SESSION['first_name'] = $account_details['first_name'];
             $_SESSION['last_name'] = $account_details['last_name'];
             $_SESSION['gender'] = $account_details['gender'];
-            $_SESSION['address'] = $account_details['address'];
-            $_SESSION['city'] = $account_details['city'];
             if ($account_details['picture_path'] == null) {
                 if ($account_details['gender'] == "Male"){
                     $_SESSION['picture_path'] = "../images/default_profile_picture_male.png";
@@ -68,7 +72,7 @@
             exit();
         }
     }
-    
+    $_SESSION['color'] = '#ff2525';
     $_SESSION['status'] = "אימייל או סיסמה שגויים";
     header("Location: login_page.php");
     exit();

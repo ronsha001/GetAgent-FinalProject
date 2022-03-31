@@ -37,6 +37,9 @@
     background-color: #504dfc;
     transition: 0.5s;
 }
+.fa-plus::before{
+    content: "\2b";
+}
 .basic_info a{
     color: #504dfc;
     text-decoration: none;

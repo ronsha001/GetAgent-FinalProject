@@ -4,8 +4,6 @@
         $first_name = $_SESSION['first_name'];
         $last_name = $_SESSION['last_name'];
         $gender = $_SESSION['gender'];
-        $address = $_SESSION['address'];
-        $city = $_SESSION['city'];
         
         $value = '';
         $type = 'hidden';
@@ -70,11 +68,6 @@
     
         <form action="edit_info_code.php" method="POST">
             <div class="txt_field">
-                <input type="email" name="email" value="<?php echo $email; ?>" required>
-                <span></span>
-                <label>אימייל</label>
-            </div>
-            <div class="txt_field">
                 <input type="text" name="first_name" value="<?php echo $first_name; ?>" required>
                 <span></span>
                 <label>שם</label>
@@ -84,17 +77,6 @@
                 <span></span>
                 <label>שם משפחה</label>
             </div>
-            <div class="txt_field">
-                <input type="text" name="address" value="<?php echo $address; ?>" required>
-                <span></span>
-                <label>כתובת</label>
-            </div>
-            <div class="txt_field">
-                <input type="text" name="city" value="<?php echo $city; ?>" required>
-                <span></span>
-                <label>עיר</label>
-            </div>
-            
         
             <div class="gender-details">
                 <input type="radio" name="gender" id="dot-1" value="זכר" <?php if($gender == 'זכר'){echo 'checked';} ?> required>

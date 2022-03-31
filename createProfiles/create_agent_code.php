@@ -4,15 +4,15 @@
             $token = $_SESSION['verify_token'];
             $email = $_SESSION['email'];
             $file = $_FILES['my_logo'];
-            $agent_cities = $_POST['agent_cities'];
-            $phone_number = $_POST['phone_number'];
-            $birth_date = $_POST['birth_date'];
-            $website_link = $_POST['website_link'];
-            $office_address = $_POST['office_address'];
-            $years_of_exp = $_POST['years_of_exp'];
-            $about_agent = $_POST['about_agent'];
-            $office_name = $_POST['office_name'];
-            $license_year = $_POST['license_year'];
+            $agent_cities = trim($_POST['agent_cities']);
+            $phone_number = trim($_POST['phone_number']);
+            $birth_date = trim($_POST['birth_date']);
+            $website_link = trim($_POST['website_link']);
+            $office_address = trim($_POST['office_address']);
+            $years_of_exp = trim($_POST['years_of_exp']);
+            $about_agent = trim($_POST['about_agent']);
+            $office_name = trim($_POST['office_name']);
+            $license_year = trim($_POST['license_year']);
             $for_sale = 0;
             $for_rent = 0;
 

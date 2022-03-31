@@ -5,7 +5,9 @@
     }
     $value = '';
     $type = 'hidden';
+    $color = '#fff';
     if (isset($_SESSION['status']) and !empty($_SESSION['status'])){
+        $color = $_SESSION['color'];
         $value = $_SESSION['status'];
         $type = 'text';
     }
@@ -26,7 +28,11 @@
     
     <title>גט אייג'נט התחברות</title>
 
-    
+    <style>
+        .error input {
+            background: <?php echo $color; ?>;
+        }
+    </style>
 </head>
 <body>
     <div class="center">
@@ -46,7 +52,7 @@
                 <span></span>
                 <label>סיסמה</label>
             </div>
-            <div class="signup_link"><a href="forgotPass.php">?שכחתה את הסיסמה</a></div>
+            <div class="signup_link"><a href="forgotPass.php">שכחתה את הסיסמה?</a></div>
             <input type="submit" name="submit" value="התחבר">
             <div class="signup_link">
                 עוד לא רשום? <a href="sign_up_page.php">הירשם</a>
@@ -55,6 +61,7 @@
                 המשך במצב אורח <a href="../index.php">המשך</a>
             </div>
         </form>
+
     </div>
 
     <!-- Google Translator -->
