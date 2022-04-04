@@ -85,7 +85,6 @@
                     if($fileSize < 2097152){
                         $fileNameNew = uniqid('', true).".".$fileActualExt;
                         $fileDestination[$i] = "$new_folder_uniqid./".$fileNameNew;
-                        echo $i.' -> '.$fileDestination[$i];
                         move_uploaded_file($fileTmpName, $fileDestination[$i]);
 
                     } else {
@@ -129,7 +128,7 @@
         `entrance_date`, `check_boxes`, `price`, `tax`, `currency`, `asset_description`, `file1_path`, `file2_path`,
         `file3_path`, `file4_path`, `file5_path`, `file6_path`, `file7_path`, `file8_path`)
         VALUES ('$email', '$office_name', '$agent_phone', '$folder_path', '$new_folder_uniqid',
-        '$sale_or_rent', '$asset_type', '$asset_condition', `$city`, '$house_number', '$street',
+        '$sale_or_rent', '$asset_type', '$asset_condition', '$city', '$house_number', '$street',
         '$floor', '$max_floor', '$num_of_rooms', '$balcony', '$size_in_sm', '$parking_station',
         '$entrance_date', '$check_boxes', '$price', '$tax', '$currency', '$asset_description', '$fileDestination[0]', '$fileDestination[1]',
         '$fileDestination[2]', '$fileDestination[3]', '$fileDestination[4]', '$fileDestination[5]', '$fileDestination[6]', '$fileDestination[7]')";

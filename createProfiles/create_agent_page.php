@@ -4,8 +4,6 @@
         $first_name = $_SESSION['first_name'];
         $last_name = $_SESSION['last_name'];
         $gender = $_SESSION['gender'];
-        $address = $_SESSION['address'];
-        $city = $_SESSION['city'];
         
         $value = '';
         $type = 'hidden';

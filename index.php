@@ -46,6 +46,7 @@
         <link rel="stylesheet" type="text/css" href="TopSection.css">
         <link rel="stylesheet" type="text/css" href="ScrollBar.css">
         <link rel="stylesheet" type="text/css" href="OpenProfiles.css">
+        <link rel="stylesheet" type="text/css" href="AgentCards.css">
 
 
         <title>גט אייג'נט</title>
@@ -98,6 +99,51 @@
             <button type="button" class="button-1" onclick="window.location.href='<?php echo $agent_link; ?>'"><?php echo $agent_profile; ?></button>
             <button type="button" class="button-2" onclick="window.location.href='createProfiles/create_agent_page.php'"><i class="fa-solid fa-plus"></i>צור פרופיל סוכנות</button>
             <button type="button" class="button-3" onclick="window.location.href='<?php if($isRegistered){echo 'Accounts/account_page.php';}else{echo 'loginSystem/login_page.php';} ?>'">החשבון שלי</button>
+        </div>
+
+        <!-- AGENTS SECTION -->
+        <div class="agents_wrapper">
+            <div class="agents_container">
+                <?php 
+                    include_once("loginSystem/db.php");
+                    $search_agents = "SELECT * FROM agents_info_table LIMIT 3";
+                    $search_agents_run = mysqli_query($con, $search_agents);
+
+                    while($agent = mysqli_fetch_array($search_agents_run)) {
+                        $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
+                        $cities = str_replace(",", ", ", $agent['agent_cities']);
+
+                        echo "
+                            <div class='agent_card'>
+                                <div class='agent_top_card'>
+                                    <div class='agent_pic_container'>
+                                        <img src=$picture_path onclick='window.location.href=`public/AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                                    </div>
+                                    <div class='agent_top_details'>
+                                        <a class='agent_title' href='public/AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
+                                        <span class='agent_forsale'>$agent[for_sale] נכסים למכירה</span>
+                                        <span class='agent_forsale'>$agent[for_rent] נכסים להשכרה</span>
+                                    </div>
+                                </div>
+                                <div class='agent_bottom_card'>
+                                    <div class='agent_cities'>
+                                        <div>
+                                            <label>עריי פעילות:</label>
+                                            <p class='title'>$cities</p>
+                                        </div>
+                                        <div>
+                                            <label>צור קשר:</label>
+                                            <p class='title'>$agent[phone_number]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ";
+                    }
+
+                    mysqli_close($con);
+                ?>
+            </div>
         </div>
 
         <!-- FOOTER SECTION -->

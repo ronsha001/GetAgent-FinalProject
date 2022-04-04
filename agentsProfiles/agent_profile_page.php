@@ -69,27 +69,27 @@
 <body>
     <!-- Navigation bar, Ty Dev Ed-->
     <nav>
-            <div class="logo">
-                <a href="../index.php">
-                <img class="myLogo" src="../images/Logo.png" style="width: 60px;" alt="logo">
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="../index.php">בית</a></li>
-                <li><a href="#">סוכנים</a></li>
-                <li><a href="#">נכסים</a></li>
-                <li><a href='../Accounts/account_page.php'>חשבון</a></li>
-                <li><a href="../About/about_page.php">עלינו</a></li>
-                <li><a href='../loginSystem/logout.php' >התנתק</a></li>
-            </ul>
-            <div class="burger">
-                <div class="lin1"></div>
-                <div class="lin2"></div>
-                <div class="lin3"></div>
-            </div>        
-        </nav>
-        <script src="../Nav.js" type="text/javascript"></script>
-        
+        <div class="logo">
+            <a href="../index.php">
+            <img class="myLogo" src="../images/Logo.png" style="width: 60px;" alt="logo">
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.php">בית</a></li>
+            <li><a href="#">סוכנים</a></li>
+            <li><a href="#">נכסים</a></li>
+            <li><a href='../Accounts/account_page.php'>חשבון</a></li>
+            <li><a href="../About/about_page.php">עלינו</a></li>
+            <li><a href='../loginSystem/logout.php' >התנתק</a></li>
+        </ul>
+        <div class="burger">
+            <div class="lin1"></div>
+            <div class="lin2"></div>
+            <div class="lin3"></div>
+        </div>        
+    </nav>
+    <script src="../Nav.js" type="text/javascript"></script>
+    
     <!-- INFO SECTION -->
     <div class="info_wrapper">
         <div class="info">
@@ -128,7 +128,7 @@
                 style='border:0'
                 loading='lazy'
                 allowfullscreen
-                src='https://www.google.com/maps/embed/v1/place?key=******
+                src='https://www.google.com/maps/embed/v1/place?key=AIzaSyBXRumEWyF_l3cYf0xrzAWQsFeyUzB-zzA
                     &q=$office_address'>
                 </iframe>");
             }
@@ -174,7 +174,7 @@
         </div>
         <?php 
             include_once('../loginSystem/db.php');
-            $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email'";
+            $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email' AND sale_or_rent='sale'";
             $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
 
             while($card = mysqli_fetch_array($assets_for_sale_run)){
@@ -257,11 +257,10 @@
             <h1>נכסים להשכרה</h1>
         </div>
         <?php 
-            include_once('../loginSystem/db.php');
-            $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email'";
-            $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
+            $assets_for_rent = "SELECT * FROM assets_info_table WHERE email='$email' AND sale_or_rent='rent'";
+            $assets_for_rent_run = mysqli_query($con, $assets_for_rent);
 
-            while($card = mysqli_fetch_array($assets_for_sale_run)){
+            while($card = mysqli_fetch_array($assets_for_rent_run)){
                 if($card['sale_or_rent'] == 'rent'){
                     $background_path = '../images/title_icon.png';
                     for($i = 1; $i < 9; $i++){
@@ -325,6 +324,7 @@
                 }
                 
             }
+            mysqli_close($con);
         ?>
     </div>
 

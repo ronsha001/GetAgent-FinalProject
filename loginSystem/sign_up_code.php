@@ -56,7 +56,7 @@
         $mail->Host = "smtp.gmail.com";
         $mail->SMTPAuth = true;
         $mail->Username = "getagent0111@gmail.com";
-        $mail->Password = "**********";
+        $mail->Password = "Tv8n93dx";
         $mail->Port = 587;
         $mail->SMTPSecure = "tls";
 
@@ -66,23 +66,24 @@
         $mail->addAddress($email);
         $mail->Subject = ("GetAgent Account Verification");
         $mail->Body = $body;
+            
         
         if($mail->send()){
-            
             return true;
         } else {
+            // echo $email;
+            echo $mail->ErrorInfo;
             return false;
         }
-
-        
 
     }
 
     # creating new account
-    include_once 'db.php';
-    $table = 'accounts';
     
     if(isset($_POST['submit'])) {
+        include_once 'db.php';
+        $table = 'accounts';
+        
         $email = trim($_POST['email']);
         $first_name = trim($_POST['first_name']);
         $last_name = trim($_POST['last_name']);
@@ -124,8 +125,8 @@
 
             } else {
                 $_SESSION['status'] = "אימייל אינו תקין.";
-                header("Location: sign_up_page.php");
-                exit();
+                // header("Location: sign_up_page.php");
+                // exit();
 
             }
             

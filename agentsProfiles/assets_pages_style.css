@@ -89,8 +89,11 @@
     flex-direction: row;
     justify-content: space-between;
 }
-.address_and_price h1, h2, h3{
+.address_and_price h1, h2, h3, h4{
     margin: 5px;
+}
+.address_and_price h4{
+    color: #ff9001;
 }
 
 /* *****ASSET DETAILS******** */
