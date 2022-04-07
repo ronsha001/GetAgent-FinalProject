@@ -145,7 +145,7 @@
                                         echo "<option value='rent' selected='true'>השכרה</option>
                                             <option value='sale'>מכירה</option>
                                         ";
-                                    }
+                                    } 
                                 ?>
                             </select>
                         </div>
