@@ -3,7 +3,7 @@
     if(!isset($_SESSION['verify_token']) or !isset($_SESSION['email'])) {
         header("Location: ../loginSystem/login_page.php");
         exit();
-    } elseif (!isset($_SESSION['is_agent']) or $_SESSION['is_agent'] == '0'){
+    } elseif (!isset($_SESSION['is_agent']) or $_SESSION['is_agent'] != '1'){
         header("Location: ../createProfiles/create_agent_page.php");
         exit();
     }
@@ -205,6 +205,7 @@
                     </div>
                     <input type=hidden name=office_name value='$office_name'>
                     <input type=hidden name=agent_phone value='$phone_number'>
+                    <input type=hidden name=id value='$card[id]'>
                     <input type=hidden name=email value='$card[email]'>
                     <input type=hidden name=post_time value='$card[post_time]'>
                     <input type=hidden name=agent_directory_path value='$card[agent_directory_path]'>
@@ -288,6 +289,7 @@
                     </div>
                     <input type=hidden name=office_name value='$card[office_name]'>
                     <input type=hidden name=agent_phone value='$card[agent_phone]'>
+                    <input type=hidden name=id value='$card[id]'>
                     <input type=hidden name=email value='$card[email]'>
                     <input type=hidden name=post_time value='$card[post_time]'>
                     <input type=hidden name=agent_directory_path value='$card[agent_directory_path]'>

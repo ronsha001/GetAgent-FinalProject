@@ -3,14 +3,13 @@
     if(!isset($_SESSION['verify_token']) or !isset($_SESSION['email'])) {
         header("Location: ../loginSystem/login_page.php");
         exit();
-    } elseif (!isset($_SESSION['is_agent']) or $_SESSION['is_agent'] == '0'){
+    } elseif (!isset($_SESSION['is_agent']) or $_SESSION['is_agent'] != '1'){
         header("Location: ../createProfiles/create_agent_page.php");
         exit();
     } elseif (empty($_POST)){
         header("Location: ../index.php");
         exit();
     }
-
     $agency_profile = 'צור פרופיל סוכנות';
     if ($_SESSION['is_agency'] == 1) {
         $agency_link = '#'; // TODO create agency page
@@ -40,28 +39,18 @@
     }
 
     $balcony = "לא צויין";
-    if($_POST['balcony'] > "" and $_POST['balcony'] != "none"){
+    if($_POST['balcony'] > "" and $_POST['balcony'] != "ללא"){
         $balcony = $_POST['balcony'];
     }
 
     $parking_station = "לא צויין";
-    if($_POST['parking_station'] > "" and $_POST['parking_station'] != "none"){
+    if($_POST['parking_station'] > "" and $_POST['parking_station'] != "ללא"){
         $parking_station = $_POST['parking_station'];
     }
     
     $asset_condition = "";
     if($_POST['asset_condition']){
-        if($_POST['asset_condition'] == 'very_new'){
-            $asset_condition = 'חדש מקבלן';
-        } elseif ($_POST['asset_condition'] == 'new'){
-            $asset_condition = 'חדש';
-        } elseif ($_POST['asset_condition'] == 'renovated'){
-            $asset_condition = 'משופץ';
-        } elseif ($_POST['asset_condition'] == 'good_condition'){
-            $asset_condition = 'במצב שמור';
-        } elseif ($_POST['asset_condition'] == 'new'){
-            $asset_condition = 'דרוש שיפוץ';
-        }
+        $asset_condition = $_POST['asset_condition'];
     }
 ?>
 
@@ -155,6 +144,13 @@
                     <div class="price">
                     <?php if($_POST['price']){ echo "<h1>$_POST[price] $_POST[symbol]</h1>";} ?>
                     </div>
+                </div>
+
+                <div class="edit_container">
+                    <form action="edit_asset_page.php" method="POST">
+                        <button type="submit" name="submit"><i class="fa-solid fa-pen-to-square"></i> ערוך פרטיי נכס</button>
+                        <input type="hidden" name="asset_data" value="<?php echo htmlentities(serialize($_POST));  ?>">
+                    </form>
                 </div>
 
                 <div class="asset_details">

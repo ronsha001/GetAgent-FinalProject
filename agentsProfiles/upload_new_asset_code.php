@@ -66,6 +66,8 @@
     mkdir("$new_folder_uniqid", 0777, true);
 
     $fileDestination = array("","","","","","","","");
+    $allowed = array('jpg', 'jpeg', 'png', 'gif');
+
     for($i = 0; $i < 8; $i++){
         if(!empty($file[$i]['name'])){
             $fileName = $file[$i]['name'];
@@ -78,7 +80,6 @@
             $fileExt = explode('.', $fileName);
             $fileActualExt = strtolower(end($fileExt));
 
-            $allowed = array('jpg', 'jpeg', 'png', 'gif');
 
             if(in_array($fileActualExt, $allowed)){
                 if($fileError === 0){

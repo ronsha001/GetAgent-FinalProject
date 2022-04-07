@@ -55,28 +55,18 @@
     }
 
     $balcony = "לא צויין";
-    if($asset_details['balcony'] > "" and $asset_details['balcony'] != "none"){
+    if($asset_details['balcony'] > "" and $asset_details['balcony'] != "ללא"){
         $balcony = $asset_details['balcony'];
     }
 
     $parking_station = "לא צויין";
-    if($asset_details['parking_station'] > "" and $asset_details['parking_station'] != "none"){
+    if($asset_details['parking_station'] > "" and $asset_details['parking_station'] != "ללא"){
         $parking_station = $asset_details['parking_station'];
     }
     
     $asset_condition = "";
     if($asset_details['asset_condition']){
-        if($asset_details['asset_condition'] == 'very_new'){
-            $asset_condition = 'חדש מקבלן';
-        } elseif ($asset_details['asset_condition'] == 'new'){
-            $asset_condition = 'חדש';
-        } elseif ($asset_details['asset_condition'] == 'renovated'){
-            $asset_condition = 'משופץ';
-        } elseif ($asset_details['asset_condition'] == 'good_condition'){
-            $asset_condition = 'במצב שמור';
-        } elseif ($asset_details['asset_condition'] == 'new'){
-            $asset_condition = 'דרוש שיפוץ';
-        }
+        $asset_condition = $asset_details['asset_condition'];
     }
 
     $login_text = "התחבר";

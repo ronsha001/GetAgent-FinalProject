@@ -97,6 +97,22 @@
 }
 
 /* *****ASSET DETAILS******** */
+.edit_container button{
+    background-color: #ff9001;
+    padding: 10px;
+    margin-right: 25px;
+    font-family: Fredoka;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .3s ease-out;
+}
+.edit_container button:hover{
+    background-color: #2691d9;
+    color: #fff;
+}
 .asset_details{
     display: flex;
     flex-direction: column;
