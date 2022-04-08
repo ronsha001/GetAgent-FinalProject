@@ -5,6 +5,13 @@
         header("Location: ../index.php");
         exit();
     }
+    $isConnected = false;
+    $isNotSameAgent = false;
+    if(isset($_SESSION['verify_token']) and !empty($_SESSION['verify_token'])){
+        $isConnected = true;
+        $isNotSameAgent = $_SESSION['email'] != $_GET['email'];
+    }
+
     $email = $_GET['email'];
     include_once("../loginSystem/db.php");
     // agent details query
@@ -93,6 +100,7 @@
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../AssetsCards.css">
     <link rel="stylesheet" type="text/css" href="Reviews.css">
+    <link rel="stylesheet" type="text/css" href="NewReviewForm.css">
     <link rel="stylesheet" type="text/css" href="../agentsProfiles/agent_profile_page_style.css">
     <title>גט אייג'נט<?php echo " - ".$office_name; ?></title>
 
@@ -199,10 +207,76 @@
         <div class="review_section_title">
             <h1>ביקורות מלקוחות קודמים</h1>
         </div>
+        <?php 
+            include_once('../loginSystem/db.php');
+            $order = "DESC";
+            $reviews_query = "SELECT reviews_info_table.id, reviews_info_table.from_email, reviews_info_table.to_email, reviews_info_table.account_name, reviews_info_table.account_picture, reviews_info_table.agent_name, reviews_info_table.subject, reviews_info_table.stars, reviews_info_table.body, accounts.picture_path 
+                            FROM reviews_info_table 
+                            LEFT JOIN accounts ON accounts.email=reviews_info_table.from_email 
+                            WHERE reviews_info_table.to_email='$email'
+                            ORDER BY reviews_info_table.stars $order";
+            try{
+                $reviews_query_run = mysqli_query($con, $reviews_query);
+                if (mysqli_num_rows($reviews_query_run) < 1){
+                    echo "אין ביקורות קודמים.";
+                }
+                while($review = mysqli_fetch_array($reviews_query_run)){
+                    $emoji = "😠";
+                    if($review['stars'] == 2){
+                        $emoji = "😞";
+                    } elseif ($review['stars'] == 3){
+                        $emoji = "🙂";
+                    } elseif ($review['stars'] == 4){
+                        $emoji = "😊";
+                    } elseif ($review['stars'] == 5){
+                        $emoji = "😍";
+                    }
+                    echo "
+                        <div class='review_container'>
+                            <div class='pic_and_name'>
+                                <img src='$review[picture_path]' alt='account pic'>
+                                <div class='reviewer_name'>
+                                    <span>$review[account_name]</span>
+                                </div>";
+                                if($isConnected and $review['from_email'] == $_SESSION['email']){
+                                    echo "<div class='edit_review'>
+                                        <form action='delete_review_code.php' method=POST>
+                                            <input type='hidden' name='review_id' value=$review[id]>
+                                            <input type='hidden' name='to_email' value='$review[to_email]'>
+                                            <button type='submit' name='delete_submit' title='מחק ביקורת'><i class='fa-solid fa-trash-can'></i></button>
+                                        </form>
+                                    </div>";
+                                }
+                            echo "</div>
 
-        <div class="review_container">
+                            <div class='review_details'>
+                                <div class='review_top_details'>
+                                    <span>$review[subject] $emoji</span>
+                                    <div class='review_stars'>
+                                        "; for($i = 5; $i > 0; $i--){
+                                            if($i <= $review['stars']){
+                                                echo "<i class='fa-solid fa-star'></i>";
+                                            } else {
+                                                echo "<i class='fa-regular fa-star'></i>";
+                                            }
+                                        } echo"
+                                    </div>
+                                </div>
+
+                                <div class='review_subject'>
+                                    <p>$review[body]</p>
+                                </div>
+                            </div>
+                        </div>
+                    ";
+                }
+            }catch (Exception $e){
+                echo $e;
+            }
+        ?>
+        <!-- <div class="review_container">
             <div class="pic_and_name">
-                <img src="../images/default_profile_picture_female.png" src="account_pic">
+                <img src="../images/default_profile_picture_female.png" alt="account_pic">
                 <div class="reviewer_name">
                     <span>רון שרעבי רון שרעבי</span>
                 </div>
@@ -224,47 +298,34 @@
                     <p>אמין מקצועי, לא מושך את הזמן ומוציא מחירים מעולים, ממליץ בחום! גדשגשלד חיכנגדחכחגד יהכשחגידש חיגעחגע ןטעכ'קטכ ןכעגדינכגד חיכנהגהכד  החיכהד חלנכגדלח לחנחינכק נוטקכק וכהגדוהכ וטעהכוטק' וטעגדשהנגן ןנעןלגד םנעכנג וןלענרלענדג לונעלגדנעח עילרקענגל לחנכעגדלנכ לחנגכלדגנ</p>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="review_container">
-            <div class="pic_and_name">
-                <img src="../images/default_profile_picture_female.png" src="account_pic">
-                <div class="reviewer_name">
-                    <span>רון שרעבי</span>
-                </div>
-            </div>
-
-            <div class="review_details">
-                <div class="review_top_details">
-                    <span>שירות מעולה מקצועי ואמין</span>
-                    <div class="review_stars">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star-half-stroke"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
+        <div class="new_review_container">
+            <div class="star_widget">
+                    <input type="radio" name="rate" id="rate-5">
+                    <label for="rate-5" class="fas fa-star"></label>
+                    <input type="radio" name="rate" id="rate-4">
+                    <label for="rate-4" class="fas fa-star"></label>
+                    <input type="radio" name="rate" id="rate-3">
+                    <label for="rate-3" class="fas fa-star"></label>
+                    <input type="radio" name="rate" id="rate-2">
+                    <label for="rate-2" class="fas fa-star"></label>
+                    <input type="radio" name="rate" id="rate-1">
+                    <label for="rate-1" class="fas fa-star"></label>
+                <form id="new_review_form" action="new_review_code.php" method="POST">
+                    <header></header>
+                    <div class="textarea">
+                        <textarea cols="30" maxlength="260" name="body" placeholder="תאר את החוויה שלך.." required></textarea>
                     </div>
-                </div>
-
-                <div class="review_subject">
-                    <p>אמין מקצועי, לא מושך את הזמן ומוציא מחירים מעולים, ממליץ בחום! גדשגשלד חיכנגדחכחגד יהכשחגידש חיגעחגע ןטעכ'קטכ ןכעגדינכגד חיכנהגהכד  החיכהד חלנכגדלח לחנחינכק נוטקכק וכהגדוהכ וטעהכוטק' וטעגדשהנגן ןנעןלגד םנעכנג וןלענרלענדג לונעלגדנעח עילרקענגל לחנכעגדלנכ לחנגכלדגנ</p>
-                </div>
+                    <input type="hidden" id="subject" name="subject">
+                    <input type="hidden" name="agent_email" value="<?php echo $email; ?>">
+                    <input type="hidden" name="agent_name" value="<?php echo $office_name; ?>">
+                    <div class="btn">
+                        <input type="submit" name="new_review_submit" value="השאר ביקורת">
+                    </div>
+                </form>
             </div>
         </div>
-        
-        <form action="#" method="POST">
-            <div class="leave_review_container">
-                <h2>השאר ביקורת</h2>
-                <div class="new_review_details">
-                    <label for="subject">נושא:(25 תווים)</label>
-                    <input type="text" class="subject" maxlength="25" name="subject" id="subject" required>
-                    <br>
-                    <label for="body">ביקורת:(260 תווים)</label>
-                    <textarea name="body" maxlength="260" class="body" id="body"></textarea>
-                </div>
-                <input type="submit" name="new_review_submit" class="new_review_submit" value="שלח ביקורת" >
-            </div>
-        </form>
     </div>
     
 
@@ -275,7 +336,6 @@
             <h1>נכסים למכירה</h1>
         </div>
         <?php 
-            include_once('../loginSystem/db.php');
             $assets_for_sale = "SELECT * FROM assets_info_table WHERE email='$email' AND sale_or_rent='sale'";
             $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
 
@@ -432,6 +492,51 @@
         function closeIMG(){
             show_picture.style.height = "0";
             show_picture_img_element.src = "";
+        }
+
+        var subject = document.getElementById("subject");
+        document.getElementById("rate-5").addEventListener("change", function(){
+            subject.value = 5;
+        });
+        document.getElementById("rate-4").addEventListener("change", function(){
+            subject.value = 4;
+        });
+        document.getElementById("rate-3").addEventListener("change", function(){
+            subject.value = 3;
+        });
+        document.getElementById("rate-2").addEventListener("change", function(){
+            subject.value = 2;
+        });
+        document.getElementById("rate-1").addEventListener("change", function(){
+            subject.value = 1;
+        });
+
+        document.getElementById('new_review_form').onsubmit = function() {
+            return isValidForm();
+        }
+        
+        function isValidForm(){
+            const isConnected = <?php echo json_encode($isConnected); ?>;
+            const isNotSameAgent = <?php echo json_encode($isNotSameAgent); ?>;
+
+            if(isConnected){
+                if(isNotSameAgent){
+                    if(subject.value > 0){
+                        return true;
+                    } else {
+                        alert("יש למלא לפחות כוכב אחד או יותר");
+                        return false;
+                    }
+                    
+                } else {
+                    alert("לא ניתן להשאיר ביקורת על הפרופיל של עצמך");
+                    return false;
+                }
+                
+            } else {
+                alert("על מנת לכתוב ביקורת - חייב להתחבר");
+                return false;
+            }
         }
     </script>
 </body>

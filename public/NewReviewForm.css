@@ -1,0 +1,130 @@
+/* ****** YOUTUBE REVIEW RATING STARS ******* */
+.new_review_container{
+    width: 400px;
+    background: #111;
+    padding: 20px 30px;
+    border-radius: 5px;
+    margin: 15px 40px 40px 0;
+    border: 1px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: sans-serif;
+    direction: rtl;
+}
+.new_review_container .star_widget input[type='radio']{
+    display: none;
+}
+.new_review_container .star_widget{
+    text-align: center;
+}
+.star_widget label{
+    font-size: 40px;
+    color: #444;
+    padding: 10px;
+    float: left;
+    transition: all 0.2s ease;
+}
+.star_widget input:not(:checked) ~ label:hover,
+.star_widget input:not(:checked) ~ label:hover ~ label{
+    color: #fd4;
+}
+.star_widget input:checked ~ label{
+    color: #fd4;
+}
+.star_widget input#rate-5:checked ~ label{
+    color: #fe7;
+    text-shadow: 0 0 20px #952;
+}
+.star_widget input#rate-1:checked ~ #new_review_form header::before{
+    content: "לא אהבתי בכלל, לא ממליץ! 😠";
+}
+.star_widget input#rate-2:checked ~ #new_review_form header::before{
+    content: "לא אהבתי 😞";
+}
+.star_widget input#rate-3:checked ~ #new_review_form header::before{
+    content: "נחמד מאוד 🙂";
+}
+.star_widget input#rate-4:checked ~ #new_review_form header::before{
+    content: "אהבתי 😊";
+}
+.star_widget input#rate-5:checked ~ #new_review_form header::before{
+    content: "אהבתי מאוד, ממליץ! 😍";
+}
+
+#new_review_form header{
+    width: 100%;
+    font-size: 25px;
+    color: #fe7;
+    font-weight: 500;
+    margin: 5px 0 20px 0;
+    text-align: center;
+    transition: all 0.2 ease;
+}
+#new_review_form .textarea{
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+}
+#new_review_form .textarea textarea{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    color: #eee;
+    border: 1px solid #333;
+    background: #222;
+    padding: 10px;
+    font-size: 17px;
+    resize: none;
+}
+#new_review_form .btn{
+    height: 45px;
+    width: 100%;
+    margin: 15px 0;
+}
+#new_review_form .btn input{
+    height: 100%;
+    width: 100%;
+    border: 1px solid #444;
+    outline: none;
+    background: #222;
+    color: #999;
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+#new_review_form .btn input:hover{
+    background: #1b1b1b;
+}
+
+@media only screen and (max-width: 650px) {
+    .new_review_container{
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .new_review_container .star_widget label{
+        font-size: 40px;
+    }
+    #new_review_form header{
+        font-size: 20px;
+    }
+}
+@media only screen and (max-width: 376px) {
+    .new_review_container .star_widget label{
+        font-size: 34px;
+    }
+}
+@media only screen and (max-width: 321px) {
+    .new_review_container .star_widget label{
+        font-size: 24px;
+    }
+    #new_review_form header{
+        font-size: 17px;
+    }
+}

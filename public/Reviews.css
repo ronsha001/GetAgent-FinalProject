@@ -26,6 +26,7 @@
 .review_container .pic_and_name{
     display: flex;
     flex-direction: row;
+    align-items: center;
     margin-bottom: 1px;
 }
 .pic_and_name img{
@@ -43,8 +44,25 @@
     background-color: #dddddd;
     width: fit-content;
 }
+.pic_and_name .edit_review button{
+    border: none;
+    padding: 0;
+    margin: 8px 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+.pic_and_name .edit_review i{
+    font-size: 20px;
+    color: #ff9001;
+    transition: 0.2s ease;
+}
+.pic_and_name .edit_review i:hover{
+    font-size: 22px;
+    color: #e33131;
+}
 .review_container .review_details{
     height: fit-content;
+    width: fit-content;
     background-color: #dddddd;
     border-radius: 15px;
     margin: 0 50px 10px 0;
@@ -68,54 +86,6 @@
     font-size: 15px;
 }
 
-.reviews_wrapper .leave_review_container{
-    height: fit-content;
-    margin: 0 25px 0 25px;
-    display: flex;
-    flex-direction: column;
-}
-.leave_review_container .new_review_details{
-    display: flex;
-    flex-direction: column;
-}
-.new_review_details *{
-    margin-right: 15px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-.leave_review_container h2{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin: 20px 0 10px 0;
-}
-
-.new_review_details .subject{
-    width: 30%;
-    padding: 5px;
-    font-size: 20px;
-}
-.new_review_details .body{
-    padding: 5px;
-    font-size: 18px;
-    resize: none;
-    width: 40%;
-    height: 100px;
-}
-
-.leave_review_container .new_review_submit{
-    width:fit-content;
-    padding: 8px;
-    border: none;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
-    background-color: #ff9001;
-    margin: 8px 20px 8px 20px;
-    cursor: pointer;
-    transition: .2s ease-out;
-}
-.leave_review_container .new_review_submit:hover{
-    background-color: #2691d9;
-    color: #dddddd;
-}
 
 @media only screen and (max-width: 1150px) {
     .reviews_wrapper{

@@ -7,8 +7,13 @@
         header("Location: ../createProfiles/create_agent_page.php");
         exit();
     } elseif (!isset($_POST['asset_data']) or empty($_POST['asset_data'])){
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-        exit();
+        if(isset($_SERVER['HTTP_REFERER'])){
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            exit();
+        } else {
+            header("Location: ../index.php");
+            exit();
+        }
     }
 
     // ASSET DETAILS DELIVERED IN A FORM AS ARRAY

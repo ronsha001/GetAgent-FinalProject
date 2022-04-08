@@ -6,6 +6,10 @@
         $value = $_SESSION['status'];
         $type = 'text';
     }
+    if (isset($_SESSION['email']) and !empty($_SESSION['email'])){
+        header("Location: ../index.php");
+        exit();
+    }
 
     
 
