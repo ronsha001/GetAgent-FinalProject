@@ -68,7 +68,7 @@
     if($asset_details['asset_condition']){
         $asset_condition = $asset_details['asset_condition'];
     }
-
+    $isConnected = false;
     $login_text = "התחבר";
     $login_link = "../loginSystem/login_page.php";
     $account_footer_text = "התחבר";
@@ -76,6 +76,7 @@
     $agent_footer_text = "צור פרופיל סוכן";
     $agent_footer_link = "../loginSystem/login_page.php";
     if(isset($_SESSION['email'], $_SESSION['verify_token']) and !empty($_SESSION['email']) and !empty($_SESSION['verify_token'])){
+        $isConnected = true;
         $login_text = "התנתק";
         $login_link = "../loginSystem/logout.php";
         $account_footer_text = "החשבון שלי";
@@ -103,6 +104,7 @@
     <link rel="stylesheet" type="text/css" href="../Nav.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../Footer.css">
+    <link rel="stylesheet" type="text/css" href="ReportBtn.css">
     <link rel="stylesheet" type="text/css" href="../agentsProfiles/assets_pages_style.css">
     <!-- IMAGES SLIDERS -->
     <title>גט אייג'נט - דף נכס</title>
@@ -274,6 +276,14 @@
                     <span><i class="fa-solid fa-circle"></i>חניה: <?php echo $parking_station; ?></span>
                 </div>
             </div>
+
+            <div class="report_wrapper">
+                <form id="reportForm" action="report_page.php" target="_blank" method="GET">
+                    <input type="hidden" name="type" value="asset">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    <button type="submit"><i class="fa-solid fa-bell"></i>  דווח על שימוש לרעה</button>
+                </form>
+            </div>
         </div>
         <div class="map_container">
             <div class="map">
@@ -404,6 +414,21 @@
 
                     console.log(asset_specification[i].childNodes);
                 }
+            }
+        }
+
+        // report submit function
+        document.getElementById('reportForm').onsubmit = function(){
+            return isValidForm();
+        }
+        function isValidForm(){
+            const isConnected = <?php echo json_encode($isConnected);?>;
+
+            if (isConnected){
+                return true;
+            } else {
+                alert("עליך להירשם על מנת לדווח.");
+                return false;
             }
         }
     </script>

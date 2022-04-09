@@ -1,0 +1,29 @@
+.report_wrapper{
+    padding: 5px;
+    margin: 5px;
+}
+.report_wrapper button{
+    padding: 8px;
+    border: none;
+    background: #ff9001;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.report_wrapper button:hover{
+    background: #2691d9;
+}
+.report_review button{
+    background: #ff9001;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 10px; 
+    padding: 4px; 
+    margin: 2px;
+    transition: all 0.3s ease;
+}
+.report_review button:hover{
+    background: #2691d9;
+}

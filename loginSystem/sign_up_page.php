@@ -50,17 +50,17 @@
         
             <form action="sign_up_code.php" method="POST">
                 <div class="txt_field">
-                    <input type="email" name="email" autocomplete="off" required>
+                    <input type="email" name="email" required>
                     <span></span>
                     <label>אימייל</label>
                 </div>
                 <div class="txt_field">
-                    <input type="text" name="first_name" autocomplete="off" required>
+                    <input type="text" name="first_name" required>
                     <span></span>
                     <label>שם</label>
                 </div>
                 <div class="txt_field">
-                    <input type="text" name="last_name" autocomplete="off" required>
+                    <input type="text" name="last_name" required>
                     <span></span>
                     <label>שם משפחה</label>
                 </div>

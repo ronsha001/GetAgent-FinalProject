@@ -29,6 +29,7 @@
     $agent_details = mysqli_fetch_array($get_agent_details_run);
     
     $email = $agent_details['email'];
+    $id = $agent_details['id'];
     $logo = $agent_details['logo_path'];
     $agent_cities = $agent_details['agent_cities'];
     $phone_number = $agent_details['phone_number'];
@@ -99,6 +100,7 @@
     <link rel="stylesheet" type="text/css" href="../Footer.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../AssetsCards.css">
+    <link rel="stylesheet" type="text/css" href="ReportBtn.css">
     <link rel="stylesheet" type="text/css" href="Reviews.css">
     <link rel="stylesheet" type="text/css" href="NewReviewForm.css">
     <link rel="stylesheet" type="text/css" href="../agentsProfiles/agent_profile_page_style.css">
@@ -140,6 +142,13 @@
     <!-- INFO SECTION -->
     <div class="info_wrapper">
         <div class="info">
+            <div class="report_wrapper">
+                <form id="reportForm" action="report_page.php" target="_blank" method="GET">
+                    <input type="hidden" name="type" value="agent">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    <button type="submit"><i class="fa-solid fa-bell"></i>  דווח על שימוש לרעה</button>
+                </form>
+            </div>
             <div class="title_and_logo">
                 <h1><?php echo $office_name; ?></h1>
                 <div class="images_container">
@@ -265,7 +274,16 @@
 
                                 <div class='review_subject'>
                                     <p>$review[body]</p>
-                                    <small>$review[date]</small>
+                                    <div class='date_and_report'>
+                                        <small>$review[date]</small>
+                                        <div class='report_review'>
+                                            <form class='reportReviewForm' action='report_page.php' target='_blank' method='GET'>
+                                                <input type='hidden' name='type' value='review'>
+                                                <input type='hidden' name='id' value='$review[id]'>
+                                                <button type='submit'><i class='fa-solid fa-bell'></i>  דווח על שימוש לרעה</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -275,31 +293,6 @@
                 echo $e;
             }
         ?>
-        <!-- <div class="review_container">
-            <div class="pic_and_name">
-                <img src="../images/default_profile_picture_female.png" alt="account_pic">
-                <div class="reviewer_name">
-                    <span>רון שרעבי רון שרעבי</span>
-                </div>
-            </div>
-
-            <div class="review_details">
-                <div class="review_top_details">
-                    <span>שירות מעולה מקצועי ואמין</span>
-                    <div class="review_stars">
-                        <i class="fa-regular fa-star"></i>
-                        <i class="fa-regular fa-star-half-stroke"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                </div>
-
-                <div class="review_subject">
-                    <p>אמין מקצועי, לא מושך את הזמן ומוציא מחירים מעולים, ממליץ בחום! גדשגשלד חיכנגדחכחגד יהכשחגידש חיגעחגע ןטעכ'קטכ ןכעגדינכגד חיכנהגהכד  החיכהד חלנכגדלח לחנחינכק נוטקכק וכהגדוהכ וטעהכוטק' וטעגדשהנגן ןנעןלגד םנעכנג וןלענרלענדג לונעלגדנעח עילרקענגל לחנכעגדלנכ לחנגכלדגנ</p>
-                </div>
-            </div>
-        </div> -->
 
         <div class="new_review_container">
             <div class="star_widget">
@@ -512,14 +505,33 @@
             subject.value = 1;
         });
 
+        // new review submit function
         document.getElementById('new_review_form').onsubmit = function() {
-            return isValidForm();
+            return isReviewFormValid();
         }
-        
-        function isValidForm(){
-            const isConnected = <?php echo json_encode($isConnected); ?>;
-            const isNotSameAgent = <?php echo json_encode($isNotSameAgent); ?>;
+        // report agent function
+        document.getElementById('reportForm').onsubmit = function(){
+            return isAgentReportValid();
+        }
+        // report review function
+        var reportReviewForms = document.getElementsByClassName('reportReviewForm');
+        for(var i = 0; i < reportReviewForms.length; i++){
+            reportReviewForms[i].addEventListener('submit', function(event){
+                if (isConnected){
+                    return true;
+                } else {
+                    event.preventDefault();
+                    alert("עליך להירשם על מנת לדווח.");
+                    return false;
+                }
+            });
+        }
 
+        const isConnected = <?php echo json_encode($isConnected); ?>;
+        const isNotSameAgent = <?php echo json_encode($isNotSameAgent); ?>;
+
+        function isReviewFormValid(){
+    
             if(isConnected){
                 if(isNotSameAgent){
                     if(subject.value > 0){
@@ -539,6 +551,21 @@
                 return false;
             }
         }
+
+        function isAgentReportValid(){
+            if (isConnected){
+                if(isNotSameAgent){
+                    return true;
+                } else {
+                    alert("לא ניתן לדווח על הפרופיל של עצמך");
+                    return false;
+                }
+            } else {
+                alert("עליך להירשם על מנת לדווח.");
+                return false;
+            }
+        }
+
     </script>
 </body>
 </html>

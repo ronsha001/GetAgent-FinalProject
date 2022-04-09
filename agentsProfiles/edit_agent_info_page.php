@@ -93,7 +93,7 @@
     <!-- INFO SECTION -->
     <div class="center">
         <div class="error">
-            <input type="<?php echo $type ?>" value="<?php echo $value; unset($_SESSION['status']);; ?>" disabled>
+            <input type="<?php echo $type ?>" value="<?php echo $value; unset($_SESSION['status']); ?>" disabled>
         </div>
 
         <h1>עריכת פרופיל סוכן</h1>
