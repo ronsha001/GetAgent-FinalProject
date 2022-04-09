@@ -210,11 +210,11 @@
         <?php 
             include_once('../loginSystem/db.php');
             $order = "DESC";
-            $reviews_query = "SELECT reviews_info_table.id, reviews_info_table.from_email, reviews_info_table.to_email, reviews_info_table.account_name, reviews_info_table.account_picture, reviews_info_table.agent_name, reviews_info_table.subject, reviews_info_table.stars, reviews_info_table.body, accounts.picture_path 
+            $reviews_query = "SELECT reviews_info_table.id, reviews_info_table.from_email, reviews_info_table.to_email, reviews_info_table.account_name, reviews_info_table.account_picture, reviews_info_table.agent_name, reviews_info_table.subject, reviews_info_table.stars, reviews_info_table.body, reviews_info_table.date, accounts.picture_path 
                             FROM reviews_info_table 
                             LEFT JOIN accounts ON accounts.email=reviews_info_table.from_email 
                             WHERE reviews_info_table.to_email='$email'
-                            ORDER BY reviews_info_table.stars $order";
+                            ORDER BY reviews_info_table.date $order";
             try{
                 $reviews_query_run = mysqli_query($con, $reviews_query);
                 if (mysqli_num_rows($reviews_query_run) < 1){
@@ -265,6 +265,7 @@
 
                                 <div class='review_subject'>
                                     <p>$review[body]</p>
+                                    <small>$review[date]</small>
                                 </div>
                             </div>
                         </div>

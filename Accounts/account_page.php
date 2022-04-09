@@ -43,6 +43,7 @@
     <link rel="stylesheet" type="text/css" href="../Footer.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../OpenProfiles.css">
+    <link rel="stylesheet" type="text/css" href="../public/Reviews.css">
     <link rel="stylesheet" type="text/css" href="account_page_style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script src="https://kit.fontawesome.com/ca3d7aca66.js" crossorigin="anonymous"></script>
@@ -101,13 +102,87 @@
             <span>ערוך את חשבונך</span>
         </div>
     </div>
-    <hr>
 
     <!-- OPEN PROFILES SECTION -->
     <div class="profiles-section">
         <button type="button" class="button-1" onclick="window.location.href='<?php echo $agent_link; ?>'"><?php echo $agent_profile; ?></button>
         <button type="button" class="button-2"><i class="fa-solid fa-plus"></i>צור פרופיל סוכנות</button>
         <button type="button" class="button-3" onclick="'Accounts/account_page.php'">החשבון שלי</button>
+    </div>
+
+    <!-- ACCOUNT'S REVIEWS SECTION -->
+    <div class="reviews_wrapper">
+        <div class="review_section_title">
+            <h1>ביקורות קודמים שלך</h1>
+        </div>
+    <?php 
+        include_once('../loginSystem/db.php');
+        $order = "DESC";
+        $reviews_query = "SELECT * 
+                            FROM reviews_info_table 
+                            WHERE reviews_info_table.from_email='$email'
+                            ORDER BY reviews_info_table.date $order";
+        try{
+            $reviews_query_run = mysqli_query($con, $reviews_query);
+            if (mysqli_num_rows($reviews_query_run) < 1){
+                echo "<h3>אין ביקורות קודמים.</h3>";
+            }
+            while($review = mysqli_fetch_array($reviews_query_run)){
+                $emoji = "😠";
+                if($review['stars'] == 2){
+                    $emoji = "😞";
+                } elseif ($review['stars'] == 3){
+                    $emoji = "🙂";
+                } elseif ($review['stars'] == 4){
+                    $emoji = "😊";
+                } elseif ($review['stars'] == 5){
+                    $emoji = "😍";
+                }
+                echo "
+                <div class='review_container'>
+                    <div class='pic_and_name'>
+                        <img src='$picture_path' alt='account pic'>
+                        <div class='reviewer_name'>
+                            <span>$review[account_name] <i class='fa-solid fa-arrow-left'></i> <a href='../public/AgentProfile.php?email=$review[to_email]' target='_blank'> $review[agent_name] </a> </span>
+                        </div>
+                        <div class='edit_review'>
+                            <form action='../public/delete_review_code.php' method=POST>
+                                <input type='hidden' name='review_id' value=$review[id]>
+                                <input type='hidden' name='to_email' value=$review[to_email]>
+                                <button type='submit' name='delete_submit' title='מחק ביקורת'><i class='fa-solid fa-trash-can'></i></button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class='review_details'>
+                        <div class='review_top_details'>
+                            <span>$review[subject] $emoji</span>
+                            <div class='review_stars'>
+                                "; for($i = 5; $i > 0; $i--){
+                                    if($i <= $review['stars']){
+                                        echo "<i class='fa-solid fa-star'></i>";
+                                    } else {
+                                        echo "<i class='fa-regular fa-star'></i>";
+                                    }
+                                } echo "
+                            </div>
+                        </div>
+
+                        <div class='review_subject'>
+                            <p>$review[body]</p>
+                            <small>$review[date]</small>
+                        </div>
+                    </div>
+                </div>
+                ";
+            }
+        } catch (Exception $e) {
+            echo $e;
+        } finally {
+            mysqli_close($con);
+        }
+        
+    ?>
     </div>
     
     <!-- FOOTER SECTION -->
