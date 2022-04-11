@@ -1,7 +1,7 @@
 <?php session_start();
     use PHPMailer\PHPMailer\PHPMailer;
 
-    function sendVerifyMail($email, $email_token, $first_name) {
+    function sendVerifyMail($email, $email_token, $first_name, $pw) {
         
         $body = "
             <!DOCTYPE html>
@@ -56,7 +56,7 @@
         $mail->Host = "smtp.gmail.com";
         $mail->SMTPAuth = true;
         $mail->Username = "getagent0111@gmail.com";
-        $mail->Password = "Tv8n93dx";
+        $mail->Password = "$pw";
         $mail->Port = 587;
         $mail->SMTPSecure = "tls";
 
@@ -111,7 +111,7 @@
         }
         if ($pass == $verify_pass){
             $email_token = md5(md5(sha1($email)));
-            $mailSent = sendVerifyMail($email, $email_token, $first_name);
+            $mailSent = sendVerifyMail($email, $email_token, $first_name, $pw);
 
             if($mailSent){
                 $create_new_account = "INSERT INTO $table (`email`, `password`, `verify_token`, `first_name`, `last_name`, `gender`, `picture_path`, `isAgent`, `isAgency`) VALUES ('$email', '$pass', '$email_token', '$first_name', '$last_name', '$gender', '$picture_path', '$is_agent', '$is_agency')";
