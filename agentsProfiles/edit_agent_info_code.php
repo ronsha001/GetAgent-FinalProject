@@ -49,8 +49,8 @@
                     if($fileError === 0){
                         if($fileSize < 2097152){
                             $fileNameNew = uniqid('', true).".".$fileActualExt;
-                            $fileDestination = "$images_folder_path./".$fileNameNew;
-                            if(file_exists($old_logo_path)){
+                            $fileDestination = "$images_folder_path/".$fileNameNew;
+                            if(file_exists($old_logo_path) and $old_logo_path != "../images/title_icon.png"){
                                 unlink($old_logo_path);
                             }
                             move_uploaded_file($fileTmpName, $fileDestination);

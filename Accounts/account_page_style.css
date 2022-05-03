@@ -43,7 +43,11 @@ body{
     border: 5px solid #fff;
     margin-left: 12px;
     border-radius: 50%;
-    background-size: 100% 100%;
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #242424;
+    object-fit: cover;
     overflow: hidden;
     align-items: center;
 }

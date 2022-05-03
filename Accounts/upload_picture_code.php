@@ -29,7 +29,10 @@
 
                     if ($setProfilePicture_run) {
                         mysqli_close($con);
-                        if ($_SESSION['picture_path'] != "../images/default_profile_picture_male.png" || $_SESSION['picture_path'] != "../images/default_profile_picture_female.png" || $_SESSION['picture_path'] != "../images/default_profile_picture_none.png"){
+                        $male_default_picture = "../images/default_profile_picture_male.png";
+                        $female_default_picture = "../images/default_profile_picture_female.png";
+                        $none_gender_default_picture = "../images/default_profile_picture_none.png";
+                        if ($_SESSION['picture_path'] != $male_default_picture and $_SESSION['picture_path'] != $female_default_picture and $_SESSION['picture_path'] != $none_gender_default_picture){
                             $file_pointer = $_SESSION['picture_path'];
                             if (file_exists($file_pointer)){
                                 unlink($file_pointer);

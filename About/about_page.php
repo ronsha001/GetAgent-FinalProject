@@ -58,8 +58,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="../index.php">בית</a></li>
-            <li><a href="#">סוכנים</a></li>
-            <li><a href="#">נכסים</a></li>
+            <li><a href="../public/agentSearch.php">סוכנים</a></li>
+            <li><a href="../public/assetSearch.php">נכסים</a></li>
             <li><a href='<?php if($isRegistered){echo "../Accounts/account_page.php";}else{echo "../loginSystem/login_page.php";} ?>'>חשבון</a></li>
             <li><a href=<?php echo $loginLink_or_logoutLink ?> > <?php echo $login_or_logout ?></a></li>
         </ul>
@@ -136,10 +136,8 @@
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
-                    <a href="#">חיפוש סוכנים</a>
-                    <a href="#">חיפוש סוכנויות</a>
-                    <a href="#">חיפוש נכסים</a>
-                    <a href="#">נכסים שנמכרו/הושכרו</a>
+                    <a href="../public/agentSearch.php">חיפוש סוכנים</a>
+                    <a href="../public/assetSearch.php">חיפוש נכסים</a>
                 </div>
             </div>
         </div>

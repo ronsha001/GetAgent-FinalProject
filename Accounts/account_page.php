@@ -28,6 +28,8 @@
         header("Location: ../index.php");
         exit();
     }
+    $max_cards = 6;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,6 +46,7 @@
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../OpenProfiles.css">
     <link rel="stylesheet" type="text/css" href="../public/Reviews.css">
+    <link rel="stylesheet" type="text/css" href="../PagerStyle.css">
     <link rel="stylesheet" type="text/css" href="account_page_style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script src="https://kit.fontawesome.com/ca3d7aca66.js" crossorigin="anonymous"></script>
@@ -61,8 +64,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="../index.php">בית</a></li>
-            <li><a href="#">סוכנים</a></li>
-            <li><a href="#">נכסים</a></li>
+            <li><a href="../public/agentSearch.php">סוכנים</a></li>
+            <li><a href="../public/assetSearch.php">נכסים</a></li>
             <li><a href="../About/about_page.php">עלינו</a></li>
             <li><a href='../loginSystem/logout.php' >התנתק</a></li>
         </ul>
@@ -127,6 +130,7 @@
             if (mysqli_num_rows($reviews_query_run) < 1){
                 echo "<h3>אין ביקורות קודמים.</h3>";
             }
+            $j = 1;
             while($review = mysqli_fetch_array($reviews_query_run)){
                 $emoji = "😠";
                 if($review['stars'] == 2){
@@ -139,7 +143,7 @@
                     $emoji = "😍";
                 }
                 echo "
-                <div class='review_container'>
+                <div class='review_container query'"; if($j > $max_cards){echo " style='display: none;'";} echo">
                     <div class='pic_and_name'>
                         <img src='$picture_path' alt='account pic'>
                         <div class='reviewer_name'>
@@ -175,7 +179,18 @@
                     </div>
                 </div>
                 ";
+                $j++;
             }
+            echo "
+                <div class='pager_container'>
+                    <div class='pagination'>
+                        <ul id='queryPager'>
+                            
+                        </ul>
+                    </div>
+                </div>
+                ";
+
         } catch (Exception $e) {
             echo $e;
         } finally {
@@ -222,10 +237,8 @@
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
-                    <a href="#">חיפוש סוכנים</a>
-                    <a href="#">חיפוש סוכנויות</a>
-                    <a href="#">חיפוש נכסים</a>
-                    <a href="#">נכסים שנמכרו/הושכרו</a>
+                    <a href="../public/agentSearch.php">חיפוש סוכנים</a>
+                    <a href="../public/assetSearch.php">חיפוש נכסים</a>
                 </div>
             </div>
         </div>
@@ -245,7 +258,7 @@
             </div>
         </section>
     </div>
-    
+    <script type="text/javascript" src="../PagerScript.js"></script>
     <script>
         var submit_picture = document.querySelector('.update_picture');
         var input_picture = document.querySelector('.my_file');
@@ -258,7 +271,13 @@
             }
         }
         
-        
+        // pager
+        const MAX_CARDS = <?php echo json_encode($max_cards) ?>;
+            
+        let numOfCards = document.querySelectorAll('.review_container');
+        let numOfPages = Math.ceil(numOfCards.length / MAX_CARDS);
+            
+        element("queryPager", numOfPages, 1, "query", MAX_CARDS);
     </script>
 
 </body>

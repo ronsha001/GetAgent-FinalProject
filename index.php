@@ -72,8 +72,8 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#">בית</a></li>
-                <li><a href="#">סוכנים</a></li>
-                <li><a href="#">נכסים</a></li>
+                <li><a href="public/agentSearch.php">סוכנים</a></li>
+                <li><a href="public/assetSearch.php">נכסים</a></li>
                 <li><a href='<?php if($isRegistered){echo "Accounts/account_page.php";}else{echo "loginSystem/login_page.php";} ?>'>חשבון</a></li>
                 <li><a href="About/about_page.php">עלינו</a></li>
                 <li><a href=<?php echo $loginLink_or_logoutLink ?> > <?php echo $login_or_logout ?></a></li>
@@ -106,7 +106,11 @@
             <div class="agents_container">
                 <?php 
                     include_once("loginSystem/db.php");
-                    $search_agents = "SELECT * FROM agents_info_table LIMIT 3";
+                    $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, AVG(reviews_info_table.stars) as min_rank
+                                        FROM agents_info_table
+                                        LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
+                                        GROUP BY reviews_info_table.to_email
+                                        ORDER BY min_rank DESC LIMIT 4";
                     $search_agents_run = mysqli_query($con, $search_agents);
 
                     while($agent = mysqli_fetch_array($search_agents_run)) {
@@ -121,8 +125,9 @@
                                     </div>
                                     <div class='agent_top_details'>
                                         <a class='agent_title' href='public/AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
-                                        <span class='agent_forsale'>$agent[for_sale] נכסים למכירה</span>
-                                        <span class='agent_forsale'>$agent[for_rent] נכסים להשכרה</span>
+                                        <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
+                                        <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
+                                        <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
                                     </div>
                                 </div>
                                 <div class='agent_bottom_card'>
@@ -183,10 +188,8 @@
                     </div>
                     <div class="footer-link-items">
                         <h2>חיפושים</h2>
-                        <a href="#">חיפוש סוכנים</a>
-                        <a href="#">חיפוש סוכנויות</a>
-                        <a href="#">חיפוש נכסים</a>
-                        <a href="#">נכסים שנמכרו/הושכרו</a>
+                        <a href="public/agentSearch.php">חיפוש סוכנים</a>
+                        <a href="public/assetSearch.php">חיפוש נכסים</a>
                     </div>
                 </div>
             </div>

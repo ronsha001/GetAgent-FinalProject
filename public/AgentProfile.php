@@ -75,12 +75,8 @@
         }
     }
     
-
-
-
-    // echo $about_agent;
-
-    
+    $max_cards = 4;
+    $assets_max_cards = 5;
 
 ?>
 <!DOCTYPE html>
@@ -103,6 +99,7 @@
     <link rel="stylesheet" type="text/css" href="ReportBtn.css">
     <link rel="stylesheet" type="text/css" href="Reviews.css">
     <link rel="stylesheet" type="text/css" href="NewReviewForm.css">
+    <link rel="stylesheet" type="text/css" href="../PagerStyle.css">
     <link rel="stylesheet" type="text/css" href="../agentsProfiles/agent_profile_page_style.css">
     <title>גט אייג'נט<?php echo " - ".$office_name; ?></title>
 
@@ -123,8 +120,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="../index.php">בית</a></li>
-            <li><a href="#">סוכנים</a></li>
-            <li><a href="#">נכסים</a></li>
+            <li><a href="agentSearch.php">סוכנים</a></li>
+            <li><a href="assetSearch.php">נכסים</a></li>
             <li><a href='../Accounts/account_page.php'>חשבון</a></li>
             <li><a href="../About/about_page.php">עלינו</a></li>
             <li><a href='<?php echo $login_link; ?>' ><?php echo $login_text; ?></a></li>
@@ -229,6 +226,7 @@
                 if (mysqli_num_rows($reviews_query_run) < 1){
                     echo "אין ביקורות קודמים.";
                 }
+                $j = 1;
                 while($review = mysqli_fetch_array($reviews_query_run)){
                     $emoji = "😠";
                     if($review['stars'] == 2){
@@ -241,7 +239,7 @@
                         $emoji = "😍";
                     }
                     echo "
-                        <div class='review_container'>
+                        <div class='review_container reviewQuery'"; if($j > $max_cards){echo " style:display: none";} echo">
                             <div class='pic_and_name'>
                                 <img src='$review[picture_path]' alt='account pic'>
                                 <div class='reviewer_name'>
@@ -289,35 +287,45 @@
                         </div>
                     ";
                 }
+                echo "
+                        <div class='pager_container'>
+                            <div class='pagination'>
+                                <ul id='reviewQueryPager'>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        ";
             }catch (Exception $e){
                 echo $e;
             }
         ?>
-
-        <div class="new_review_container">
-            <div class="star_widget">
-                    <input type="radio" name="rate" id="rate-5">
-                    <label for="rate-5" class="fas fa-star"></label>
-                    <input type="radio" name="rate" id="rate-4">
-                    <label for="rate-4" class="fas fa-star"></label>
-                    <input type="radio" name="rate" id="rate-3">
-                    <label for="rate-3" class="fas fa-star"></label>
-                    <input type="radio" name="rate" id="rate-2">
-                    <label for="rate-2" class="fas fa-star"></label>
-                    <input type="radio" name="rate" id="rate-1">
-                    <label for="rate-1" class="fas fa-star"></label>
-                <form id="new_review_form" action="new_review_code.php" method="POST">
-                    <header></header>
-                    <div class="textarea">
-                        <textarea cols="30" maxlength="260" name="body" placeholder="תאר את החוויה שלך.." required></textarea>
-                    </div>
-                    <input type="hidden" id="subject" name="subject">
-                    <input type="hidden" name="agent_email" value="<?php echo $email; ?>">
-                    <input type="hidden" name="agent_name" value="<?php echo $office_name; ?>">
-                    <div class="btn">
-                        <input type="submit" name="new_review_submit" value="השאר ביקורת">
-                    </div>
-                </form>
+        <div class="new_reviewer_wrapper">
+            <div class="new_review_container">
+                <div class="star_widget">
+                        <input type="radio" name="rate" id="rate-5">
+                        <label for="rate-5" class="fas fa-star"></label>
+                        <input type="radio" name="rate" id="rate-4">
+                        <label for="rate-4" class="fas fa-star"></label>
+                        <input type="radio" name="rate" id="rate-3">
+                        <label for="rate-3" class="fas fa-star"></label>
+                        <input type="radio" name="rate" id="rate-2">
+                        <label for="rate-2" class="fas fa-star"></label>
+                        <input type="radio" name="rate" id="rate-1">
+                        <label for="rate-1" class="fas fa-star"></label>
+                    <form id="new_review_form" action="new_review_code.php" method="POST">
+                        <header></header>
+                        <div class="textarea">
+                            <textarea cols="30" maxlength="260" name="body" placeholder="תאר את החוויה שלך.." required></textarea>
+                        </div>
+                        <input type="hidden" id="subject" name="subject">
+                        <input type="hidden" name="agent_email" value="<?php echo $email; ?>">
+                        <input type="hidden" name="agent_name" value="<?php echo $office_name; ?>">
+                        <div class="btn">
+                            <input type="submit" name="new_review_submit" value="השאר ביקורת">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -352,7 +360,7 @@
                         $symbol = "$";
                     }
                     echo ("
-                    <div class='asset_card' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
+                    <div class='asset_card forSale' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
                         <div class='description'>
                             <h4>$card[street] $card[house_number], $card[city]</h4>
                             <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
@@ -363,6 +371,15 @@
                     ");
                 }
             }
+            echo "
+                        <div class='pager_container'>
+                            <div class='pagination'>
+                                <ul id='forSaleQueryPager'>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        ";
         ?>
     </div>
 
@@ -394,7 +411,7 @@
                         $symbol = "$";
                     }
                     echo ("
-                    <div class='asset_card' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
+                    <div class='asset_card forRent' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
                         <div class='description'>
                             <h4>$card[street] $card[house_number], $card[city]</h4>
                             <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
@@ -405,6 +422,15 @@
                 }
                 
             }
+            echo "
+                    <div class='pager_container'>
+                        <div class='pagination'>
+                            <ul id='forRentQueryPager'>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    ";
             mysqli_close($con);
         ?>
     </div>
@@ -446,10 +472,8 @@
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
-                    <a href="#">חיפוש סוכנים</a>
-                    <a href="#">חיפוש סוכנויות</a>
-                    <a href="#">חיפוש נכסים</a>
-                    <a href="#">נכסים שנמכרו/הושכרו</a>
+                    <a href="agentSearch.php">חיפוש סוכנים</a>
+                    <a href="assetSearch.php">חיפוש נכסים</a>
                 </div>
             </div>
         </div>
@@ -475,6 +499,7 @@
         <img id="show_picture_img_element" onclick="">
     </div>
     
+    <script type="text/javascript" src="../PagerScript.js"></script>
     <script>
         var show_picture = document.getElementById("show_picture");
         var show_picture_img_element = document.getElementById("show_picture_img_element");
@@ -566,6 +591,25 @@
             }
         }
 
+        // review pager
+        const MAX_CARDS = <?php echo json_encode($max_cards) ?>;
+        let numOfCards = document.querySelectorAll('.review_container');
+        let numOfPages = Math.ceil(numOfCards.length / MAX_CARDS);
+            
+        element("reviewQueryPager", numOfPages, 1, "reviewQuery", MAX_CARDS);
+
+        // forSale pager
+        const ASSETS_MAX_CARDS = <?php echo json_encode($assets_max_cards); ?>;
+        let numOfSaleCards = document.querySelectorAll('.forSale');
+        let numOfSalePages = Math.ceil(numOfSaleCards.length / ASSETS_MAX_CARDS);
+
+        element("forSaleQueryPager", numOfSalePages, 1, "forSale", ASSETS_MAX_CARDS);
+
+        // forSale pager
+        let numOfRentCards = document.querySelectorAll('.forRent');
+        let numOfRentPages = Math.ceil(numOfRentCards.length / ASSETS_MAX_CARDS);
+
+        element("forRentQueryPager", numOfRentPages, 1, "forRent", ASSETS_MAX_CARDS);
     </script>
 </body>
 </html>

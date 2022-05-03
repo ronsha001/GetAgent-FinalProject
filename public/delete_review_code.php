@@ -15,7 +15,7 @@
         echo $to_email;
         include_once('../loginSystem/db.php');
 
-        $delete_review = "DELETE FROM reviews_info_table WHERE id='$review_id' AND to_email='$to_email' LIMIT 1";
+        $delete_review = "DELETE FROM reviews_info_table WHERE id='$review_id' AND from_email='$_SESSION[email]' AND to_email='$to_email' LIMIT 1";
         $delete_review_run = mysqli_query($con, $delete_review);
     } catch (Exception $e){
         echo $e;

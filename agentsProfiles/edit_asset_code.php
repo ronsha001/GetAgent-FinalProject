@@ -20,7 +20,7 @@
     include_once("../loginSystem/db.php");
     for ($i = 1, $j = 8; $i < $j; $i++, $j--){
 
-        if (str_contains($_POST['img'.$i], '*deleteMe*')){
+        if (strpos($_POST['img'.$i], '*deleteMe*')){
             $fileToDelete = substr( $_POST['img'.$i], 0, strlen($_POST['img'.$i]) - 10 );
 
             if( file_exists( $fileToDelete ) ){
@@ -36,7 +36,7 @@
                 unlink($fileToDelete);
             }
         }
-        if (str_contains($_POST['img'.$j], '*deleteMe*')){
+        if (strpos($_POST['img'.$j], '*deleteMe*')){
             $fileToDelete = substr( $_POST['img'.$j], 0, strlen($_POST['img'.$j]) - 10 );
 
             if( file_exists( $fileToDelete ) ){

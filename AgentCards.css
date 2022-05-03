@@ -4,6 +4,7 @@
     height: fit-content;
     display: flex;
     justify-content: center;
+    background: #f9f9f9;
 }
 .agents_container{
     width: 90%;
@@ -22,15 +23,25 @@
     margin: 20px;
     width: 35%;
     height: 250px;
-    background-color: rgba(235, 235, 235, 0.4);
+     background-color: #fff;/*rgba(235, 235, 235, 0.4); */
     display: flex;
     flex-direction: column;
     justify-content: right;
     font-family: Fredoka;
+    transition: all ease-out .3s;
 }
 .agent_card:hover{
     box-shadow: 0 0 16px 0;
+    animation: shake 0.5s;
 }
+@keyframes shake {
+    0% { transform:  rotate(0deg); }
+    10% { transform:  rotate(-1deg); }
+    20% { transform:  rotate(1deg); }
+    30% { transform:  rotate(-1deg); }
+    40% { transform:  rotate(0deg); }
+}
+
 .agent_top_card{
     height: 50%;
     border-bottom: 2px solid silver;

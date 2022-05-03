@@ -34,7 +34,7 @@
             $new_agent_images_folder = $new_folder_uniqid."/images";
             mkdir("$new_agent_images_folder", 0777, true);
 
-            $fileDestination = "";
+            $fileDestination = "../images/title_icon.png";
             if (!empty($file['name'])){
                 $fileName = $_FILES['my_logo']['name'];
                 $fileTmpName = $_FILES['my_logo']['tmp_name'];
@@ -51,7 +51,7 @@
                     if($fileError === 0){
                         if($fileSize < 2097152){
                             $fileNameNew = uniqid('', true).".".$fileActualExt;
-                            $fileDestination = "$new_agent_images_folder./".$fileNameNew;
+                            $fileDestination = "$new_agent_images_folder/".$fileNameNew;
                             move_uploaded_file($fileTmpName, $fileDestination);
                         } else {
                             $_SESSION['status'] = "נפח הקובץ גדול מידי";

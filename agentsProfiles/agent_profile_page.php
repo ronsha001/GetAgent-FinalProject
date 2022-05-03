@@ -76,8 +76,8 @@
         </div>
         <ul class="nav-links">
             <li><a href="../index.php">בית</a></li>
-            <li><a href="#">סוכנים</a></li>
-            <li><a href="#">נכסים</a></li>
+            <li><a href="../public/agentSearch.php">סוכנים</a></li>
+            <li><a href="../public/assetSearch.php">נכסים</a></li>
             <li><a href='../Accounts/account_page.php'>חשבון</a></li>
             <li><a href="../About/about_page.php">עלינו</a></li>
             <li><a href='../loginSystem/logout.php' >התנתק</a></li>
@@ -367,10 +367,8 @@
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
-                    <a href="#">חיפוש סוכנים</a>
-                    <a href="#">חיפוש סוכנויות</a>
-                    <a href="#">חיפוש נכסים</a>
-                    <a href="#">נכסים שנמכרו/הושכרו</a>
+                    <a href="../public/agentSearch.php">חיפוש סוכנים</a>
+                    <a href="../public/assetSearch.php">חיפוש נכסים</a>
                 </div>
             </div>
         </div>

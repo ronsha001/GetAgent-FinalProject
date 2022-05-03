@@ -1,10 +1,17 @@
 /* ****** YOUTUBE REVIEW RATING STARS ******* */
+.new_reviewer_wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+
+}
 .new_review_container{
-    width: 400px;
+    width: 50%;
     background: #111;
     padding: 20px 30px;
     border-radius: 5px;
-    margin: 15px 40px 40px 0;
+    margin: 15px 0;
     border: 1px solid #444;
     display: flex;
     align-items: center;

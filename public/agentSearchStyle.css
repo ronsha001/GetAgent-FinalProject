@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200&family=Fredoka:wght@300&family=Open+Sans:wght@300;400&family=Poppins:wght@200;300;400&display=swap');
+body{
+    background-color: #f9f9f9;
+}
+.myForm{
+    height: fit-content;
+    width: 100%;
+    padding: 10px 50px 10px 50px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+.search_container{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Open Sans', sans-serif;
+    width: 80%;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 8px 0;
+}
+.title h2{
+    padding: 0;
+    margin: 5px 5px 19px 0;
+}
+.search_container .top_inputs{
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    flex-wrap: wrap;
+    border-bottom: 1px solid silver;
+}
+.search_container .input{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: fit-content;
+}
+.search_container .input label i{
+    color: #434343;
+}
+.top_inputs .input label input{
+    display: block;
+}
+.input input[type='text']{
+    padding: 8px;
+    font-size: 18px;
+}
+.input input[type='number']{
+    padding: 8px;
+    font-size: 18px;
+    width: 180px;
+}
+.submit_container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.submit_container button[type='submit']{
+    padding: 10px;
+    font-size: 17px;
+    width: 100px;
+    height: 41px;
+    background-color: #43a5e7;
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    transition: ease-out 0.3s;
+}
+.submit_container button[type='button']{
+    padding: 10px;
+    font-size: 17px;
+    width: fit-content;
+    height: 41px;
+    background-color: #d5dade;
+    cursor: pointer;
+    color: #242424;
+    border: none;
+    border-radius: 2px;
+    transition: ease-out 0.3s;
+}
+.submit_container button i{
+    font-size: 14px;
+    transition: ease-out 0.3s;
+}
+.submit_container button[type='submit']:hover{
+    background-color: #ff9001;
+    color: #242424;
+}
+.submit_container button[type='button']:hover{
+    background-color: #94979a;
+}
+.search_container .advanced_search{
+    display: none;
+}
+.bottom_inputs{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+}
+.bottom_inputs .bottom_container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 880px) {
+    .myForm{
+        padding: 10px;
+    }
+    .search_container{
+        width: 100%;
+    }
+}

@@ -1,6 +1,7 @@
 .reviews_wrapper{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     direction: rtl;
     justify-content: right;
     padding: 5px 150px 5px 150px;
@@ -11,6 +12,7 @@
     color: #ff9001;
     margin: 0 25px 0 25px;
     margin-bottom: 0;
+    width: 100%;
     text-align: center;
     border-bottom: 1px solid silver;
 }
@@ -18,6 +20,7 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
+    width: 45%;
     margin: 0 25px 0 25px;
 }
 .review_container * {

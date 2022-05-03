@@ -85,7 +85,7 @@
                 if($fileError === 0){
                     if($fileSize < 2097152){
                         $fileNameNew = uniqid('', true).".".$fileActualExt;
-                        $fileDestination[$i] = "$new_folder_uniqid./".$fileNameNew;
+                        $fileDestination[$i] = "$new_folder_uniqid/".$fileNameNew;
                         move_uploaded_file($fileTmpName, $fileDestination[$i]);
 
                     } else {

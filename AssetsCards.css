@@ -8,7 +8,7 @@
 }
 .assets_wrapper{
     direction: rtl;
-    background-color: rgb(236, 236, 236);
+    background-color: #f9f9f9;/*rgb(236, 236, 236);*/
     height: fit-content;
     display: flex;
     flex-direction: row;
@@ -26,9 +26,12 @@
     margin: 10px;
     background-size: 100% 100%;
     cursor: pointer;
+    border-radius: 6px;
+    transition: ease-out 0.2s;
 }
 .asset_card:hover{
     box-shadow: 0 0 8px 0;
+    background-size: 110% 110%;
 }
 .asset_card .description{
     position: absolute;
@@ -39,6 +42,8 @@
     background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 .asset_card .description *{
     margin-right: 3px;
