@@ -50,6 +50,7 @@
     <link rel="stylesheet" type="text/css" href="../PagerStyle.css">
     <link rel="stylesheet" type="text/css" href="../AssetsCards.css">
     <link rel="stylesheet" type="text/css" href="../AgentCards.css">
+    <link rel="stylesheet" type="text/css" href="../ConfirmWindow.css">
     <link rel="stylesheet" type="text/css" href="account_page_style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script src="https://kit.fontawesome.com/ca3d7aca66.js" crossorigin="anonymous"></script>
@@ -95,17 +96,37 @@
                 <li><span>מין: </span><?php echo $gender ?></li>
                 <li><span>אימייל: </span><?php echo $email ?></li>
                 <br>
-                <div class="social">
-                    <a href="" target="_blank"><i class="fa-brands fa-facebook"></i></a>    
-                    <a href="" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="" target="_blank"><i class="fab fa-twitter" ></i></a>
-                    <a href="" target="_blank"><i class="fab fa-linkedin"></i></a>
-                </div>
             </ul>  
         </div>
         <div class="edit">
             <a href="edit_info_page.php"><i class="fa-solid fa-user-pen"></i></a>
             <span>ערוך את חשבונך</span>
+        </div>
+        <div class="delete">
+            <a class="delBtn"><i class="fa-solid fa-user-slash"></i></a>
+            <span>מחיקת חשבון</span>
+        </div>
+    </div>
+
+    <div class="window_wrapper">
+        <div class="delete_window">
+            <?php 
+                if($gender == 'נקבה') {
+                    echo "<h1>את בטוחה שאת רוצה למחוק את חשבונך?</h1>";
+                } else {
+                    echo "<h1>אתה בטוח שאתה רוצה למחוק את חשבונך?</h1>";
+                }
+            ?>
+            <h4>כל הלייקים שלך ימחקו יחד עם הביקורות שכתבתה. אם קיים פרופיל סוכן - הפרופיל יימחק יחד עם כל הנכסים שפורסמו.</h4>
+            <div class="form_container">
+                <form action="delete_account_code.php" method="POST">
+                    <input class="input pw" type="password" name="password" placeholder="הכנס סיסמה" required>
+                    <div class="btn_container">
+                        <input class="input sbmt" type="submit" name="submit" value="מחק את החשבון שלי">
+                        <button type="button" class="cancel">בטל</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -268,7 +289,7 @@
             </div>
     <?php 
         try{
-            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
+            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank
                                 FROM agents_info_table
                                 LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
                                 GROUP BY agents_info_table.email
@@ -394,6 +415,7 @@
         </section>
     </div>
     <script type="text/javascript" src="../PagerScript.js"></script>
+    <script type="text/javascript" src="../ConfirmWindow.js"></script>
     <script>
         var submit_picture = document.querySelector('.update_picture');
         var input_picture = document.querySelector('.my_file');

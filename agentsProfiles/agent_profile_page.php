@@ -54,6 +54,7 @@
     <link rel="stylesheet" type="text/css" href="../Footer.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../AssetsCards.css">
+    <link rel="stylesheet" type="text/css" href="../ConfirmWindow.css">
     <link rel="stylesheet" type="text/css" href="agent_profile_page_style.css">
 
     <title>פרופיל הסוכן שלי</title>
@@ -90,6 +91,28 @@
     </nav>
     <script src="../Nav.js" type="text/javascript"></script>
     
+    <div class="window_wrapper">
+        <div class="delete_window">
+            <?php 
+                if($_SESSION['gender'] == 'נקבה') {
+                    echo "<h1>את בטוחה שאת רוצה למחוק את הפרופיל?</h1>";
+                } else {
+                    echo "<h1>אתה בטוח שאתה רוצה למחוק את הפרופיל?</h1>";
+                }
+            ?>
+            <h4>הפרופיל יימחק יחד עם כל הנכסים שפורסמו.</h4>
+            <div class="form_container">
+                <form action="delete_profile_code.php" method="POST">
+                    <input class="input pw" type="password" name="password" placeholder="הכנס סיסמה" required>
+                    <div class="btn_container">
+                        <input class="input sbmt" type="submit" name="submit" value="מחק את הפרופיל שלי">
+                        <button type="button" class="cancel">בטל</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- INFO SECTION -->
     <div class="info_wrapper">
         <div class="info">
@@ -99,6 +122,10 @@
                 </div>
                 <div class="btn_container">
                     <button onclick="window.location.href='upload_new_asset_page.php'"><i class="fa-solid fa-plus"> פרסום נכס חדש</i></button>
+                </div>
+                <div class="delete">
+                    <a class="delBtn"><i class="fa-solid fa-user-slash"></i></a>
+                    <span>מחיקת פרופיל</span>
                 </div>
             </div>
             <div class="title_and_logo">
@@ -393,6 +420,8 @@
     <div class="show_picture" id="show_picture" onclick="closeIMG()">
         <img id="show_picture_img_element" onclick="">
     </div>
+    
+    <script type="text/javascript" src="../ConfirmWindow.js"></script>
 
     <script>
         var show_picture = document.getElementById("show_picture");

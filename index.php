@@ -106,7 +106,7 @@
             <div class="agents_container">
                 <?php 
                     include_once("loginSystem/db.php");
-                    $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
+                    $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank
                                         FROM agents_info_table
                                         LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
                                         GROUP BY agents_info_table.email

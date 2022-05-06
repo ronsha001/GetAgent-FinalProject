@@ -182,7 +182,7 @@
                     include_once("../loginSystem/db.php");
                     try{
                         if(!isset($_GET) or empty($_GET)){
-                            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
+                            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank
                                                 FROM agents_info_table
                                                 LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
                                                 GROUP BY agents_info_table.email
@@ -272,25 +272,25 @@
                             $calcReviewsAvg = false;
                             $queryContainsAgentName = false; $agentFullName = [];
                             if(array_key_exists('min_rank', $parameters) && array_key_exists('agent_name', $parameters)){
-                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank, accounts.first_name, accounts.last_name
                                 FROM agents_info_table
                                 LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email
                                 LEFT JOIN accounts ON accounts.email = agents_info_table.email ";
                                 $calcReviewsAvg = true;
                                 $queryContainsAgentName = true;
                             } else if (array_key_exists('min_rank', $parameters)){
-                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank
                                 FROM agents_info_table
                                 LEFT JOIN reviews_info_table ON reviews_info_table.to_email = email ";
                                 $calcReviewsAvg = true;
                             } else if(array_key_exists('agent_name', $parameters)){
-                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank, accounts.first_name, accounts.last_name
                                 FROM agents_info_table
                                 LEFT JOIN accounts ON accounts.email = agents_info_table.email
                                 LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
                                 $queryContainsAgentName = true;
                             } else {
-                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, CAST(AVG(reviews_info_table.stars) as decimal(10,1)) as min_rank
                                             FROM agents_info_table
                                             LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
                             }

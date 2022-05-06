@@ -20,6 +20,12 @@
 
                     $update_account_run = mysqli_query($con, $update_account);
 
+                    $update_agent_table = "UPDATE agents_info_table
+                                            SET verify_token='$newToken'
+                                            WHERE verify_token='$token'";
+
+                    $update_agent_table_run = mysqli_query($con, $update_agent_table);
+                    
                     if(mysqli_affected_rows($con)){
                         $_SESSION['status'] = "סיסמה חדשה אושרה.";
                     } else {

@@ -1,5 +1,5 @@
 <?php session_start();
-    if ($_SESSION['is_agent'] === '0' and isset($_SESSION['verify_token']) and isset($_SESSION['email']) and !empty($_SESSION['email'])){
+    if ($_SESSION['is_agent'] == 0 and isset($_SESSION['verify_token']) and isset($_SESSION['email']) and !empty($_SESSION['email'])){
         $email = $_SESSION['email'];
         $first_name = $_SESSION['first_name'];
         $last_name = $_SESSION['last_name'];

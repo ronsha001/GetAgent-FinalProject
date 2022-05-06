@@ -69,6 +69,7 @@
     <link rel="stylesheet" type="text/css" href="../Nav.css">
     <link rel="stylesheet" type="text/css" href="../ScrollBar.css">
     <link rel="stylesheet" type="text/css" href="../Footer.css">
+    <link rel="stylesheet" type="text/css" href="../ConfirmWindow.css">
     <link rel="stylesheet" type="text/css" href="assets_pages_style.css">
     <!-- IMAGES SLIDERS -->
     <title>גט אייג'נט - דף נכס</title>
@@ -105,7 +106,29 @@
     </nav>
     <script src="../Nav.js" type="text/javascript"></script>
 
-    
+    <div class="window_wrapper">
+        <div class="delete_window">
+            <?php 
+                if($_SESSION['gender'] == 'נקבה') {
+                    echo "<h1>את בטוחה שאת רוצה למחוק את הנכס?</h1>";
+                } else {
+                    echo "<h1>אתה בטוח שאתה רוצה למחוק את הנכס?</h1>";
+                }
+            ?>
+            <h4>הנכס יימחק יחד עם כל תמונות הנכס.</h4>
+            <div class="form_container">
+                <form action="delete_asset_code.php" method="POST">
+                    <input class="input pw" type="password" name="password" placeholder="הכנס סיסמה" required>
+                    <div class="btn_container">
+                        <input class="input sbmt" type="submit" name="submit" value="מחק נכס זה">
+                        <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
+                        <input type="hidden" name="asset_directory" value="<?php echo $_POST['asset_directory_path']; ?>">
+                        <button type="button" class="cancel">בטל</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <!-- ASSET SECTION -->
     <div class="asset_wrapper">
@@ -151,6 +174,10 @@
                         <button type="submit" name="submit"><i class="fa-solid fa-pen-to-square"></i> ערוך פרטיי נכס</button>
                         <input type="hidden" name="asset_data" value="<?php echo htmlentities(serialize($_POST));  ?>">
                     </form>
+                    <div class="delete">
+                        <a class="delBtn"><i class="fa-solid fa-user-slash"></i></a>
+                        <span>מחיקת נכס</span>
+                    </div>
                 </div>
 
                 <div class="asset_details">
@@ -329,7 +356,8 @@
             </div>
         </section>
     </div>
-
+    
+    <script type="text/javascript" src="../ConfirmWindow.js"></script>
     <script>
         var indexValue = 1;
         showImg(indexValue);
