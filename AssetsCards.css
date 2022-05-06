@@ -33,6 +33,43 @@
     box-shadow: 0 0 8px 0;
     background-size: 110% 110%;
 }
+.asset_card .unlikeForm button{
+    float: left;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    margin: 2px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease-out .3s;
+    background-color: #ff9001;
+}
+.asset_card .likeForm button{
+    float: left;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    margin: 2px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease-out .3s;
+}
+.asset_card .likeForm button:hover{
+    background-color: #ff9001;
+}
+.asset_card .likeForm button i{
+    transform: translateY(8%);
+}
+.asset_card .unlikeForm button i{
+    transform: translateY(8%);
+}
+
 .asset_card .description{
     position: absolute;
     width: 100%;

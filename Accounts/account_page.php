@@ -28,8 +28,9 @@
         header("Location: ../index.php");
         exit();
     }
-    $max_cards = 6;
-
+    $max_reviews = 6;
+    $max_asset_cards = 10;
+    $max_agent_cards = 4;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +48,8 @@
     <link rel="stylesheet" type="text/css" href="../OpenProfiles.css">
     <link rel="stylesheet" type="text/css" href="../public/Reviews.css">
     <link rel="stylesheet" type="text/css" href="../PagerStyle.css">
+    <link rel="stylesheet" type="text/css" href="../AssetsCards.css">
+    <link rel="stylesheet" type="text/css" href="../AgentCards.css">
     <link rel="stylesheet" type="text/css" href="account_page_style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     <script src="https://kit.fontawesome.com/ca3d7aca66.js" crossorigin="anonymous"></script>
@@ -143,7 +146,7 @@
                     $emoji = "😍";
                 }
                 echo "
-                <div class='review_container query'"; if($j > $max_cards){echo " style='display: none;'";} echo">
+                <div class='review_container query'"; if($j > $max_reviews){echo " style='display: none;'";} echo">
                     <div class='pic_and_name'>
                         <img src='$picture_path' alt='account pic'>
                         <div class='reviewer_name'>
@@ -193,13 +196,145 @@
 
         } catch (Exception $e) {
             echo $e;
-        } finally {
-            mysqli_close($con);
         }
         
     ?>
+
     </div>
-    
+
+    <!-- ACCOUNT'S ASSETS LIKES SECTION -->
+    <div class='assets_wrapper'>
+        <div class='for_sale_title'>
+            <h1>הנכסים שאהבתה</h1>
+        </div>
+        <?php 
+            $liked_asset_query = "SELECT *
+                                    FROM assets_info_table
+                                    WHERE email_likes LIKE '%$email%'";
+            try{
+                $liked_asset_query_run = mysqli_query($con, $liked_asset_query);
+                $index = 1;
+                while($card = mysqli_fetch_array($liked_asset_query_run)){
+                    $background_path = '../images/title_icon.png';
+                    for($i = 1; $i < 9; $i++){
+                        if($card['file'.$i.'_path']){
+                            $background_path = $card['file'.$i.'_path'];
+                            break;
+                        }
+                    }
+                    $price = "";
+                    $symbol = "";
+                    if($card['price'] > "" and $card['currency'] == 'shekel'){
+                        $price = "מחיר: $card[price] ₪";
+                        $symbol = "₪";
+                    } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                        $price = "מחיר: $card[price] $";
+                        $symbol = "$";
+                    }
+                    echo "
+                    <div class='asset_card asset' id=$card[id] onclick='window.location.href=`../public/AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_asset_cards){echo "display: none;";} echo "'>
+                        <form class='unlikeForm' action='../public/UnlikeCode.php' method='POST'>
+                            <button class='unlikeBtn' type='submit' title='הסר מהרשימה'><i class='fa-regular fa-heart'></i></button>
+                            <input type='hidden' name='type' value='asset'>
+                            <input type='hidden' name='type_id' value=$card[id]>
+                        </form>
+                        <div class='description'>
+                            <h4>$card[street] $card[house_number], $card[city]</h4>
+                            <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                            <span>$price</span>
+                        </div>
+                    </div>             
+                    ";
+                    $index++;
+                }
+                echo "  <div class='pager_container'>
+                            <div class='pagination'>
+                                <ul id='assetsPager'>
+
+                                </ul>
+                            </div>
+                        </div>";
+            } catch (Exception $e){
+                echo $e->getMessage();
+            }
+        ?>
+    </div>
+
+    <!-- ACCOUNT'S AGENTS LIKES SECTION -->
+    <div class="agents_wrapper">
+        <div class="agents_container">
+            <div class="top_title">
+                <h1>הסוכנים שאהבתה</h1>
+            </div>
+    <?php 
+        try{
+            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
+                                FROM agents_info_table
+                                LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
+                                GROUP BY agents_info_table.email
+                                HAVING agents_info_table.email_likes LIKE '%$email%'
+                                ORDER BY min_rank DESC";
+            
+            $search_agents_run = mysqli_query($con, $search_agents);
+            $index = 1;
+            while($agent = mysqli_fetch_array($search_agents_run)) {
+                $picture_path = $agent['logo_path'];
+                $cities = str_replace(",", ", ", $agent['agent_cities']);
+
+                echo "
+                    <div class='agent_card agent'>
+                        <div class='agent_top_card'>
+                            <div class='agent_pic_container'>
+                                <img src=$picture_path onclick='window.location.href=`../public/AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                            </div>
+                            <div class='agent_top_details'>
+                                <div class='title'>
+                                    <a class='agent_title' href='../public/AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
+                                    <form class='unlikeForm' action='../public/UnlikeCode.php' method='POST'>
+                                        <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                        <input type='hidden' name='type' value='agent'>
+                                        <input type='hidden' name='type_id' value=$agent[id]>
+                                    </form>
+                                </div>
+                                <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
+                                <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
+                                <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
+                            </div>
+                        </div>
+                        <div class='agent_bottom_card'>
+                            <div class='agent_cities'>
+                                <div>
+                                    <label>עריי פעילות:</label>
+                                    <p class='title'>$cities</p>
+                                </div>
+                                <div>
+                                    <label>צור קשר:</label>
+                                    <p class='title'>$agent[phone_number]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+                $index++;
+            }
+            echo "
+                <div class='pager_container'>
+                    <div class='pagination'>
+                        <ul id='agentsPager'>
+                            
+                        </ul>
+                    </div>
+                </div>
+            ";
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        } finally {
+            mysqli_close($con);
+        }
+    ?>
+        </div>
+    </div>
+
     <!-- FOOTER SECTION -->
     <div class="footer-container">
         <section class="footer-subscription">
@@ -271,13 +406,29 @@
             }
         }
         
-        // pager
-        const MAX_CARDS = <?php echo json_encode($max_cards) ?>;
+        // reviews pager
+        const MAX_CARDS = <?php echo json_encode($max_reviews) ?>;
             
         let numOfCards = document.querySelectorAll('.review_container');
         let numOfPages = Math.ceil(numOfCards.length / MAX_CARDS);
             
         element("queryPager", numOfPages, 1, "query", MAX_CARDS);
+
+        // assets pager
+        const MAX_ASSET_CARDS = <?php echo json_encode($max_asset_cards) ?>;
+        
+        let numOfAssetCards = document.querySelectorAll(".asset");
+        let numOfAssetPages = Math.ceil(numOfAssetCards.length / MAX_ASSET_CARDS);
+
+        element("assetsPager", numOfAssetPages, 1, "asset", MAX_ASSET_CARDS);
+
+        // agents pager
+        const MAX_AGENT_CARDS = <?php echo json_encode($max_agent_cards) ?>;
+
+        let numOfAgentCards = document.querySelectorAll('.agent');
+        let numOfAgentPages = Math.ceil(numOfAgentCards.length / MAX_AGENT_CARDS);
+
+        element("agentsPager", numOfAgentPages, 1, "agent", MAX_AGENT_CARDS);
     </script>
 
 </body>

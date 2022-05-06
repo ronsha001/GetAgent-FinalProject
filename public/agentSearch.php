@@ -180,213 +180,251 @@
                 <?php 
                 
                     include_once("../loginSystem/db.php");
-                    if(!isset($_GET) or empty($_GET)){
-                        $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, AVG(reviews_info_table.stars) as min_rank
-                                            FROM agents_info_table
-                                            LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
-                                            GROUP BY agents_info_table.email
-                                            ORDER BY min_rank DESC";
-                        $search_agents_run = mysqli_query($con, $search_agents);
-                        $index = 1;
-                        while($agent = mysqli_fetch_array($search_agents_run)) {
-                            $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
-                            $cities = str_replace(",", ", ", $agent['agent_cities']);
+                    try{
+                        if(!isset($_GET) or empty($_GET)){
+                            $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
+                                                FROM agents_info_table
+                                                LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
+                                                GROUP BY agents_info_table.email
+                                                ORDER BY min_rank DESC";
+                            $search_agents_run = mysqli_query($con, $search_agents);
+                            $index = 1;
+                            while($agent = mysqli_fetch_array($search_agents_run)) {
+                                $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
+                                $cities = str_replace(",", ", ", $agent['agent_cities']);
 
+                                echo "
+                                    <div class='agent_card query'"; if($index > $max_cards){echo "style='display: none;'";} echo">
+                                        <div class='agent_top_card'>
+                                            <div class='agent_pic_container'>
+                                                <img src=../$picture_path onclick='window.location.href=`AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                                            </div>
+                                            <div class='agent_top_details'>
+                                                <div class='title'>
+                                                    <a class='agent_title' href='AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
+                                                    "; 
+                                                    if($isRegistered and strpos($agent['email_likes'], $_SESSION['email'])) {
+                                                        echo "<form class='unlikeForm' action='UnlikeCode.php' method='POST'>
+                                                                <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                                <input type='hidden' name='type' value='agent'>
+                                                                <input type='hidden' name='type_id' value=$agent[id]>
+                                                            </form>";
+                                                    } else {
+                                                        echo "<form class='likeForm' action='LikeCode.php' method='POST'>
+                                                                <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                                <input type='hidden' name='type' value='agent'>
+                                                                <input type='hidden' name='type_id' value=$agent[id]>
+                                                            </form>";
+                                                    }    
+                                                echo "
+                                                </div>
+                                                <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
+                                                <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
+                                                <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
+                                            </div>
+                                        </div>
+                                        <div class='agent_bottom_card'>
+                                            <div class='agent_cities'>
+                                                <div>
+                                                    <label>עריי פעילות:</label>
+                                                    <p class='title'>$cities</p>
+                                                </div>
+                                                <div>
+                                                    <label>צור קשר:</label>
+                                                    <p class='title'>$agent[phone_number]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+                                $index++;
+                            }
                             echo "
-                                <div class='agent_card query'"; if($index > $max_cards){echo "style='display: none;'";} echo">
-                                    <div class='agent_top_card'>
-                                        <div class='agent_pic_container'>
-                                            <img src=../$picture_path onclick='window.location.href=`AgentProfile.php?email=$agent[email]`' alt=agent_pic>
-                                        </div>
-                                        <div class='agent_top_details'>
-                                            <a class='agent_title' href='AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
-                                            <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
-                                            <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
-                                            <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
-                                        </div>
-                                    </div>
-                                    <div class='agent_bottom_card'>
-                                        <div class='agent_cities'>
-                                            <div>
-                                                <label>עריי פעילות:</label>
-                                                <p class='title'>$cities</p>
-                                            </div>
-                                            <div>
-                                                <label>צור קשר:</label>
-                                                <p class='title'>$agent[phone_number]</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class='pager_container'>
+                                <div class='pagination'>
+                                    <ul id='queryPager'>
+                                        
+                                    </ul>
                                 </div>
-                            ";
-                            $index++;
-                        }
-                        echo "
-                        <div class='pager_container'>
-                            <div class='pagination'>
-                                <ul id='queryPager'>
-                                    
-                                </ul>
                             </div>
-                        </div>
-                        ";
+                            ";
 
-                    } else {
-                        $keysArr = ['agent_cities', 'office_name', 'agent_name', 'office_address', 'years_of_exp', 'min_rank', 'for_rent', 'for_sale'];
-                        $parameters = [];
-                        $i = 0;
-                        $addWhereQuery = false;
-                        // set array of user's input parameters while arr's key is equal to db fields name
-                        foreach($_GET as $key => $value) {
-                            if(!empty($value)) {
-                                if($key != 'min_rank' && $key != 'agent_name'){
-                                    $addWhereQuery = true;
-                                }
-                                $parameters[$keysArr[$i]] = trim($value);
-                            }
-                            $i++;
-                        }
-
-                        
-
-                        // build user's query
-                        // TODO fix min_rank query
-                        $calcReviewsAvg = false;
-                        $queryContainsAgentName = false; $agentFullName = [];
-                        if(array_key_exists('min_rank', $parameters) && array_key_exists('agent_name', $parameters)){
-                            $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
-                            FROM agents_info_table
-                            LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email
-                            LEFT JOIN accounts ON accounts.email = agents_info_table.email ";
-                            $calcReviewsAvg = true;
-                            $queryContainsAgentName = true;
-                        } else if (array_key_exists('min_rank', $parameters)){
-                            $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, AVG(reviews_info_table.stars) AS min_rank
-                            FROM agents_info_table
-                            LEFT JOIN reviews_info_table ON reviews_info_table.to_email = email ";
-                            $calcReviewsAvg = true;
-                        } else if(array_key_exists('agent_name', $parameters)){
-                            $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
-                            FROM agents_info_table
-                            LEFT JOIN accounts ON accounts.email = agents_info_table.email
-                            LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
-                            $queryContainsAgentName = true;
                         } else {
-                            $userQ = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, AVG(reviews_info_table.stars) AS min_rank
-                                        FROM agents_info_table
-                                        LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
-                        }
-                        if($addWhereQuery){
-                            $userQ = $userQ . "WHERE ";
-                        }
-
-                        $paraLength = count($parameters);
-                        $i = 1;
-                        foreach($parameters as $key => $value) {
-                            if($key == 'reviews_avg' or $key == 'min_rank'){
-                                continue;
-                            }
-                            if($key == 'agent_name'){
-                                $agentFullName = explode(' ', $value); // firstName lastName
-                                continue;
-                            }
-                            if($key == 'for_sale' or $key == 'for_rent' || $key == 'years_of_exp'){
-                                if($paraLength == $i){
-                                    $userQ = $userQ . " $key >= $value ";
-                                } else {
-                                    $userQ = $userQ . " $key >= $value AND";
+                            $keysArr = ['agent_cities', 'office_name', 'agent_name', 'office_address', 'years_of_exp', 'min_rank', 'for_rent', 'for_sale'];
+                            $parameters = [];
+                            $i = 0;
+                            $addWhereQuery = false;
+                            // set array of user's input parameters while arr's key is equal to db fields name
+                            foreach($_GET as $key => $value) {
+                                if(!empty($value)) {
+                                    if($key != 'min_rank' && $key != 'agent_name'){
+                                        $addWhereQuery = true;
+                                    }
+                                    $parameters[$keysArr[$i]] = trim($value);
                                 }
-                                
-                                continue;
+                                $i++;
                             }
-                            if($paraLength == $i){
-                                $userQ = $userQ . " $key LIKE '%$value%' ";
+
+                            
+
+                            // build user's query
+                            // TODO fix min_rank query
+                            $calcReviewsAvg = false;
+                            $queryContainsAgentName = false; $agentFullName = [];
+                            if(array_key_exists('min_rank', $parameters) && array_key_exists('agent_name', $parameters)){
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
+                                FROM agents_info_table
+                                LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email
+                                LEFT JOIN accounts ON accounts.email = agents_info_table.email ";
+                                $calcReviewsAvg = true;
+                                $queryContainsAgentName = true;
+                            } else if (array_key_exists('min_rank', $parameters)){
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank
+                                FROM agents_info_table
+                                LEFT JOIN reviews_info_table ON reviews_info_table.to_email = email ";
+                                $calcReviewsAvg = true;
+                            } else if(array_key_exists('agent_name', $parameters)){
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.logo_path, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank, accounts.first_name, accounts.last_name
+                                FROM agents_info_table
+                                LEFT JOIN accounts ON accounts.email = agents_info_table.email
+                                LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
+                                $queryContainsAgentName = true;
                             } else {
-                                $userQ = $userQ . " $key LIKE '%$value%' AND";
+                                $userQ = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) AS min_rank
+                                            FROM agents_info_table
+                                            LEFT JOIN reviews_info_table ON reviews_info_table.to_email = agents_info_table.email ";
                             }
-                            $i++;
-                        }
+                            if($addWhereQuery){
+                                $userQ = $userQ . "WHERE ";
+                            }
 
-                        // if last word in userQ is AND or OR then remove it
-                        if (substr($userQ, strlen($userQ) - 3, strlen($userQ)) == 'AND') {
+                            $paraLength = count($parameters);
+                            $i = 1;
+                            foreach($parameters as $key => $value) {
+                                if($key == 'reviews_avg' or $key == 'min_rank'){
+                                    continue;
+                                }
+                                if($key == 'agent_name'){
+                                    $agentFullName = explode(' ', $value); // firstName lastName
+                                    continue;
+                                }
+                                if($key == 'for_sale' or $key == 'for_rent' || $key == 'years_of_exp'){
+                                    if($paraLength == $i){
+                                        $userQ = $userQ . " $key >= $value ";
+                                    } else {
+                                        $userQ = $userQ . " $key >= $value AND";
+                                    }
+                                    
+                                    continue;
+                                }
+                                if($paraLength == $i){
+                                    $userQ = $userQ . " $key LIKE '%$value%' ";
+                                } else {
+                                    $userQ = $userQ . " $key LIKE '%$value%' AND";
+                                }
+                                $i++;
+                            }
 
-                            $userQ = substr($userQ, 0, strlen($userQ) - 3);
-                        
-                        }
+                            // if last word in userQ is AND or OR then remove it
+                            if (substr($userQ, strlen($userQ) - 3, strlen($userQ)) == 'AND') {
 
-                        $userQ = $userQ . " GROUP BY agents_info_table.email ";
-                        
-                        // if user's query contains reviews avg then add the following string to the query
-                        if($calcReviewsAvg) {
-                            $userQ = $userQ . " HAVING $parameters[min_rank] <= min_rank ";
+                                $userQ = substr($userQ, 0, strlen($userQ) - 3);
+                            
+                            }
+
+                            $userQ = $userQ . " GROUP BY agents_info_table.email ";
+                            
+                            // if user's query contains reviews avg then add the following string to the query
+                            if($calcReviewsAvg) {
+                                $userQ = $userQ . " HAVING $parameters[min_rank] <= min_rank ";
+                                
+                            }
+                            if($queryContainsAgentName){
+                                if($calcReviewsAvg) {
+                                    $userQ = $userQ . "AND ";
+                                } else {
+                                    $userQ = $userQ . "HAVING ";
+                                }
+                                if(count($agentFullName) == 2){
+                                    $userQ = $userQ . "(first_name LIKE '%$agentFullName[0]%' AND last_name LIKE '%$agentFullName[1]%' OR last_name LIKE '%$agentFullName[0]%' AND first_name LIKE '%$agentFullName[1]%')";
+                                } else if (count($agentFullName) == 1) {
+                                    $userQ = $userQ . "(first_name LIKE '%$agentFullName[0]%' OR last_name LIKE '%$agentFullName[0]%')";
+                                }
+                            }
+                            $userQ = $userQ . " ORDER BY min_rank DESC";
+                            
+                            echo $userQ;
+
+                            $userQ_run = mysqli_query($con, $userQ);
+                            $index = 1;
+                            while($agent = mysqli_fetch_array($userQ_run)) {
+                                $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
+                                $cities = str_replace(",", ", ", $agent['agent_cities']);
+
+                                echo "
+                                    <div class='agent_card query'"; if($index > $max_cards){echo "style='display: none;'";} echo">
+                                        <div class='agent_top_card'>
+                                            <div class='agent_pic_container'>
+                                                <img src=../$picture_path onclick='window.location.href=`AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                                            </div>
+                                            <div class='agent_top_details'>
+                                                <div class='title'>
+                                                    <a class='agent_title' href='AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
+                                                    ";
+                                                    if($isRegistered and strpos($agent['email_likes'], $_SESSION['email'])) {
+                                                        echo "<form class='unlikeForm' action='UnlikeCode.php' method='POST'>
+                                                                <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                                <input type='hidden' name='type' value='agent'>
+                                                                <input type='hidden' name='type_id' value=$agent[id]>
+                                                            </form>";
+                                                    } else {
+                                                        echo "<form class='likeForm' action='LikeCode.php' method='POST'>
+                                                                <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                                <input type='hidden' name='type' value='agent'>
+                                                                <input type='hidden' name='type_id' value=$agent[id]>
+                                                            </form>";
+                                                    } 
+                                                echo "
+                                                </div>
+                                                <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
+                                                <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
+                                                <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
+                                            </div>
+                                        </div>
+                                        <div class='agent_bottom_card'>
+                                            <div class='agent_cities'>
+                                                <div>
+                                                    <label>עריי פעילות:</label>
+                                                    <p class='title'>$cities</p>
+                                                </div>
+                                                <div>
+                                                    <label>צור קשר:</label>
+                                                    <p class='title'>$agent[phone_number]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+                                $index++;
+                            }
+                            if(mysqli_num_rows($userQ_run) < 1) {
+                                echo "<h3>לא נמצאו תוצאות.</h3>";
+                            }
+                            echo "
+                            <div class='pager_container'>
+                                <div class='pagination'>
+                                    <ul id='queryPager'>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            ";
                             
                         }
-                        if($queryContainsAgentName){
-                            if($calcReviewsAvg) {
-                                $userQ = $userQ . "AND ";
-                            } else {
-                                $userQ = $userQ . "HAVING ";
-                            }
-                            if(count($agentFullName) == 2){
-                                $userQ = $userQ . "(first_name LIKE '%$agentFullName[0]%' AND last_name LIKE '%$agentFullName[1]%' OR last_name LIKE '%$agentFullName[0]%' AND first_name LIKE '%$agentFullName[1]%')";
-                            } else if (count($agentFullName) == 1) {
-                                $userQ = $userQ . "(first_name LIKE '%$agentFullName[0]%' OR last_name LIKE '%$agentFullName[0]%')";
-                            }
-                        }
-                        $userQ = $userQ . " ORDER BY min_rank DESC";
-                        
-                        echo $userQ;
-
-                        $userQ_run = mysqli_query($con, $userQ);
-                        $index = 1;
-                        while($agent = mysqli_fetch_array($userQ_run)) {
-                            $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
-                            $cities = str_replace(",", ", ", $agent['agent_cities']);
-
-                            echo "
-                                <div class='agent_card query'"; if($index > $max_cards){echo "style='display: none;'";} echo">
-                                    <div class='agent_top_card'>
-                                        <div class='agent_pic_container'>
-                                            <img src=../$picture_path onclick='window.location.href=`AgentProfile.php?email=$agent[email]`' alt=agent_pic>
-                                        </div>
-                                        <div class='agent_top_details'>
-                                            <a class='agent_title' href='AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
-                                            <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
-                                            <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
-                                            <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
-                                        </div>
-                                    </div>
-                                    <div class='agent_bottom_card'>
-                                        <div class='agent_cities'>
-                                            <div>
-                                                <label>עריי פעילות:</label>
-                                                <p class='title'>$cities</p>
-                                            </div>
-                                            <div>
-                                                <label>צור קשר:</label>
-                                                <p class='title'>$agent[phone_number]</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ";
-                            $index++;
-                        }
-                        if(mysqli_num_rows($userQ_run) < 1) {
-                            echo "<h3>לא נמצאו תוצאות.</h3>";
-                        }
-                        echo "
-                        <div class='pager_container'>
-                            <div class='pagination'>
-                                <ul id='queryPager'>
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                        ";
-                        
-                    }
                     mysqli_close($con);
+                } catch (Exception $e){
+                    echo $e->getMessage();
+                }
                 ?>
             </div>
         </div>
@@ -503,6 +541,21 @@
                 
             element("queryPager", numOfPages, 1, "query", MAX_CARDS);
             
+            // like form function
+            var isRegistered = <?php echo json_encode($isRegistered); ?>;
+            var likeBtn = document.querySelectorAll('.likeBtn');
+            for(var i = 0; i < likeBtn.length; i++){
+                likeBtn[i].onclick = function(e){likeFunction(e);};
+            }
+            function likeFunction(e){ 
+                
+                if(!isRegistered){
+                    alert("על מנת לעשות פעולה זאת עליך להתחבר.");
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+            }
         </script>
     </body>
 </html>

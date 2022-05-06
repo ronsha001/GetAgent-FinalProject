@@ -214,8 +214,9 @@
                     </div>
                     <div class="contact_wrapper">
                         <div class="contact_container">
+
                             <div class="agent_details">
-                                <div class="icon_name">
+                                <div class="icon_name" onclick="window.location.href='AgentProfile.php?email=<?php echo $asset_details['email']; ?>'">
                                     <i class="fa-solid fa-circle-user"></i>
                                     <span><?php echo $asset_details['office_name']; ?></span>
                                 </div>
@@ -224,13 +225,26 @@
                                     <span><?php echo $asset_details['agent_phone']; ?></span>
                                 </div>
                             </div>
+
                             <hr>
+                            <?php
+                                if(isset($_SESSION['status'])){
+                                    echo "<div class='status_container'>
+                                            <h3>$_SESSION[status]</h3>
+                                        </div>
+                                    ";
+                                    unset($_SESSION['status']);
+                                } 
+                            ?>
+
                             <div class="user_details">
-                                <form action="" method="POST">
-                                    <input type="tel" name="user_phone" class="user_phone" placeholder="מספר פלאפון" required>
+                                <form action="mailAgent.php" method="POST">
+                                    <input type="tel" name="phone" class="user_phone" placeholder="מספר פלאפון" required>
+                                    <input type="hidden" name="agent_email" value="<?php echo $asset_details['email'] ?>">
                                     <input type="submit" class="contact_submit" name="submit" value="אני רוצה עוד פרטים">
                                 </form>
                             </div>
+
                         </div>
                     </div>
                     

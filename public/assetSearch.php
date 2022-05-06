@@ -1,5 +1,6 @@
 <?php session_start();
     $isRegistered = false;
+    $email = '';
     $agent_profile = '<i class="fa-solid fa-plus"></i> צור פרופיל סוכן';
     $agent_profile_footer = 'צור פרופיל סוכן';
     $agency_profile = 'צור פרופיל סוכנות';
@@ -17,6 +18,7 @@
         $loginLink_or_logoutLink = "../loginSystem/logout.php";
         $isRegistered = true;
         $agent_link = '../createProfiles/create_agent_page.php';
+        $email = $_SESSION['email'];
         if ($_SESSION['is_agent'] == 1) {
             $agent_link = '../agentsProfiles/agent_profile_page.php'; // TODO create agent page
             $agent_profile = 'פרופיל הסוכן שלי';
@@ -285,278 +287,331 @@
         <?php 
             include_once('../loginSystem/db.php');
             $queryExists = false;
-            if(!isset($_GET) or empty($_GET)){
-                $assets_for_sale = "SELECT * FROM assets_info_table WHERE sale_or_rent='sale'";
-                $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
-                $index = 1;
-                echo "
-                    <div class='assets_wrapper'>
-                        <div class='for_sale_title'>
-                            <h1>למכירה</h1>
-                        </div>
-                ";
-                while($card = mysqli_fetch_array($assets_for_sale_run)){
-                    if($card['sale_or_rent'] == 'sale'){
-                        $background_path = '../images/title_icon.png';
-                        for($i = 1; $i < 9; $i++){
-                            if($card['file'.$i.'_path']){
-                                $background_path = $card['file'.$i.'_path'];
-                                break;
-                            }
-                        }
-                        $price = "";
-                        $symbol = "";
-                        if($card['price'] > "" and $card['currency'] == 'shekel'){
-                            $price = "מחיר: $card[price] ₪";
-                            $symbol = "₪";
-                        } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
-                            $price = "מחיר: $card[price] $";
-                            $symbol = "$";
-                        }
-                        echo "
-                        <div class='asset_card sale' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
-                            <div class='description'>
-                                <h4>$card[street] $card[house_number], $card[city]</h4>
-                                <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
-                                <span>$price</span>
-                            </div>
-                        </div>             
-                        ";
-                        $index++;
-                    }
-                }
-                echo "  <div class='pager_container'>
-                            <div class='pagination'>
-                                <ul id='salePager'>
-
-                                </ul>
-                            </div>
-                        </div>
-
-                </div>";
-
-                $assets_for_rent = "SELECT * FROM assets_info_table WHERE sale_or_rent='rent'";
-                $assets_for_rent_run = mysqli_query($con, $assets_for_rent);
-                $index = 1;
-                echo "
-                    <div class='assets_wrapper'>
-                        <div class='for_sale_title'>
-                            <h1>להשכרה</h1>
-                        </div>
-                ";
-                while($card = mysqli_fetch_array($assets_for_rent_run)) {
-                    if($card['sale_or_rent'] == 'rent'){
-                        $background_path = '../images/title_icon.png';
-                        for($i = 1; $i < 9; $i++){
-                            if($card['file'.$i.'_path']){
-                                $background_path = $card['file'.$i.'_path'];
-                                break;
-                            }
-                        }
-                        $price = "";
-                        $symbol = "";
-                        if($card['price'] > "" and $card['currency'] == 'shekel'){
-                            $price = "מחיר: $card[price] ₪";
-                            $symbol = "₪";
-                        } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
-                            $price = "מחיר: $card[price] $";
-                            $symbol = "$";
-                        }
-                        echo "
-                        <div class='asset_card rent' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
-                            <div class='description'>
-                                <h4>$card[street] $card[house_number], $card[city]</h4>
-                                <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
-                                <span>$price</span>
-                            </div>
-                        </div>              
-                        ";
-                        $index++;
-                    }
-                }
-                echo "
-                    <div class='pager_container'>
-                        <div class='pagination'>
-                            <ul id='rentPager'>
-                                
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>";
-            } else {
-                $queryExists = true;
-                $keysArr = ['sale_or_rent', 'city', 'asset_type', 'min_rooms', 'max_rooms', 'min_price', 'max_price', 'check_boxes', 'floor', 'max_floor', 'min_size', 'max_size', 'entrance_date'];
-                $checkboxes = [];
-                $assetTypes = [];
-                $parameters = [];
-                $i = 0;
-                $parking_station = false;
-
-                // set array of user's input parameters while arr's key is equal to db fields name
-                foreach($_GET as $key => $value) {
-                    if(!empty($value)) {
-                        
-                        if($key == "check_boxes") {
-                            $checkboxes = explode(",", $value);
-                            unset($checkboxes[count($checkboxes) - 1]);
-                            $parking_station = in_array("חניה", $checkboxes);
-                        } else if($key == "asset_type") {
-                            $assetTypes = explode(",", $value);
-                            unset($assetTypes[count($assetTypes) - 1]);
-                        } else {
-
-                            $parameters[$keysArr[$i]]= trim($value);
-                        }
-                    }
-                    $i++;
-                }
-                // $checkboxes = explode(",", $parameters);
-             //   print_r($parameters);
-             //   print_r($checkboxes);
-
-                /* BUILD SPECIFIC USER QUERY */
-
-                $asset_status_hebrew = "";
-                $actual_asset_status = "";
-                if(!isset($parameters['sale_or_rent']) or empty($parameters['sale_or_rent'])){
-                    echo "השתבש";
-                }
-                if($parameters['sale_or_rent'] == 'sale') {
-                    $asset_status_hebrew = "למכירה";
-                    $actual_asset_status = "sale";
-                } else if ($parameters['sale_or_rent'] == 'rent') {
-                    $asset_status_hebrew = "להשכרה";
-                    $actual_asset_status = "rent";
-                }
-
-                
-                $userQ = "SELECT * FROM assets_info_table WHERE ";
-                foreach($parameters as $key => $value) {
-                    if ($key == 'min_price') {
-                        $min_price = str_replace(',', '', $value);
-                        $userQ = $userQ . " REPLACE(price, ',', '') >= $min_price  AND";
-                        continue;
-                    } else if ($key == 'max_price') {
-                        $max_price = str_replace(',', '', $value);
-                        $userQ = $userQ . " REPLACE(price, ',', '') <=  $max_price AND";
-                        continue;
-                    } else if ($key == 'min_rooms') {
-                        $userQ = $userQ . " num_of_rooms >= $value AND";
-                        continue;
-                    } else if ($key == 'max_rooms') {
-                        $userQ = $userQ . " num_of_rooms <= $value AND";
-                        continue;
-                    } else if ($key == 'min_floor') {
-                        $userQ = $userQ . " floor >= $value AND";
-                        continue;
-                    } else if ($key == 'max_floor') {
-                        $userQ = $userQ . " floor <= $value AND";
-                        continue;
-                    } else if ($key == 'min_size') {
-                        $userQ = $userQ . " size_in_sm >= $value AND";
-                        continue;
-                    } else if ($key == 'max_size') {
-                        $userQ = $userQ . " size_in_sm <= $value AND";
-                        continue;
-                    } else if ($key == 'entrance_date') {
-                        $userQ = $userQ . " DATE(entrance_date) >= $value AND";
-                        continue;
-                    }
-                    $userQ = $userQ . " $key LIKE '%$value%' AND";
-                }
-                if($parking_station){
-                    $userQ = $userQ . " parking_station NOT LIKE '%ללא%' AND";
-                }
-                foreach($checkboxes as $key => $value) {
-                    if($value == 'חניה'){
-                        continue;
-                    }
-                    $userQ = $userQ . " check_boxes LIKE '%$value%' AND";
-                }
-                if(!empty($assetTypes)){
-                    $userQ = $userQ . "(";
-                }
-                foreach($assetTypes as $key => $value) {
-                    $userQ = $userQ . " asset_type LIKE '%$value%' OR";
-                }
-                // if last word in userQ is AND or OR then remove it
-                if (substr($userQ, strlen($userQ) - 3, strlen($userQ)) == 'AND') {
-
-                    $userQ = substr($userQ, 0, strlen($userQ) - 3);
-                
-                } else if (substr($userQ, strlen($userQ) - 2, strlen($userQ)) == 'OR') {
-                    
-                    $userQ = substr($userQ, 0, strlen($userQ) - 2);
-                    $userQ = $userQ . ")";
-                    
-                }
-
-                
-                echo $userQ;
-
-                
-                if($_GET['sale_or_rent'] == $actual_asset_status){
-                    $userQ_run = mysqli_query($con, $userQ);
+            try{
+                if(!isset($_GET) or empty($_GET)){
+                    $assets_for_sale = "SELECT assets_info_table.*
+                                        FROM assets_info_table
+                                        WHERE sale_or_rent='sale'";
+                    $assets_for_sale_run = mysqli_query($con, $assets_for_sale);
                     $index = 1;
                     echo "
-                    <div class='assets_wrapper'>
-                        <div class='for_sale_title'>
-                            <h1>$asset_status_hebrew</h1>
-                        </div>
-                    ";
-                    while($card = mysqli_fetch_array($userQ_run)){
-                        $background_path = '../images/title_icon.png';
-                        for($i = 1; $i < 9; $i++){
-                            if($card['file'.$i.'_path']){
-                                $background_path = $card['file'.$i.'_path'];
-                                break;
-                            }
-                        }
-                        $price = "";
-                        $symbol = "";
-                        if($card['price'] > "" and $card['currency'] == 'shekel'){
-                            $price = "מחיר: $card[price] ₪";
-                            $symbol = "₪";
-                        } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
-                            $price = "מחיר: $card[price] $";
-                            $symbol = "$";
-                        }
-                        echo "
-                        <div class='asset_card query' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
-                            <div class='description'>
-                                <h4>$card[street] $card[house_number], $card[city]</h4>
-                                <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
-                                <span>$price</span>
+                        <div class='assets_wrapper'>
+                            <div class='for_sale_title'>
+                                <h1>למכירה</h1>
                             </div>
-                        </div>             
-                        ";
-
-                        $index++;
+                    ";
+                    while($card = mysqli_fetch_array($assets_for_sale_run)){
+                        if($card['sale_or_rent'] == 'sale'){
+                            $background_path = '../images/title_icon.png';
+                            for($i = 1; $i < 9; $i++){
+                                if($card['file'.$i.'_path']){
+                                    $background_path = $card['file'.$i.'_path'];
+                                    break;
+                                }
+                            }
+                            $price = "";
+                            $symbol = "";
+                            if($card['price'] > "" and $card['currency'] == 'shekel'){
+                                $price = "מחיר: $card[price] ₪";
+                                $symbol = "₪";
+                            } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                                $price = "מחיר: $card[price] $";
+                                $symbol = "$";
+                            }
+                            echo "
+                            <div class='asset_card sale' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
+                                ";
+                                if($isRegistered and strpos($card['email_likes'], $email)) { // TODO edit and add new like to email_likes column
+                                    echo "<form class='unlikeForm' action='UnlikeCode.php' method='POST'> 
+                                            <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                } else {
+                                    echo "<form class='likeForm' action='LikeCode.php' method='POST'>
+                                            <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                }
+                                echo "
+                                <div class='description'>
+                                    <h4>$card[street] $card[house_number], $card[city]</h4>
+                                    <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                                    <span>$price</span>
+                                </div>
+                            </div>             
+                            ";
+                            $index++;
+                        }
                     }
-                    if(mysqli_num_rows($userQ_run) < 1) {
-                        echo "<h3>לא נמצאו תוצאות.</h3>";
+                    echo "  <div class='pager_container'>
+                                <div class='pagination'>
+                                    <ul id='salePager'>
+
+                                    </ul>
+                                </div>
+                            </div>
+
+                    </div>";
+
+                    $assets_for_rent = "SELECT assets_info_table.*
+                                        FROM assets_info_table
+                                        WHERE sale_or_rent='rent'";
+                    $assets_for_rent_run = mysqli_query($con, $assets_for_rent);
+                    $index = 1;
+                    echo "
+                        <div class='assets_wrapper'>
+                            <div class='for_sale_title'>
+                                <h1>להשכרה</h1>
+                            </div>
+                    ";
+                    while($card = mysqli_fetch_array($assets_for_rent_run)) {
+                        if($card['sale_or_rent'] == 'rent'){
+                            $background_path = '../images/title_icon.png';
+                            for($i = 1; $i < 9; $i++){
+                                if($card['file'.$i.'_path']){
+                                    $background_path = $card['file'.$i.'_path'];
+                                    break;
+                                }
+                            }
+                            $price = "";
+                            $symbol = "";
+                            if($card['price'] > "" and $card['currency'] == 'shekel'){
+                                $price = "מחיר: $card[price] ₪";
+                                $symbol = "₪";
+                            } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                                $price = "מחיר: $card[price] $";
+                                $symbol = "$";
+                            }
+                            echo "
+                            <div class='asset_card rent' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
+                                ";
+                                if($isRegistered and strpos($card['email_likes'], $email)) {
+                                    echo "<form class='unlikeForm' action='UnlikeCode.php' method='POST'>
+                                            <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                } else {
+                                    echo "<form class='likeForm' action='LikeCode.php' method='POST'>
+                                            <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                }
+                                echo "<div class='description'>
+                                    <h4>$card[street] $card[house_number], $card[city]</h4>
+                                    <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                                    <span>$price</span>
+                                </div>
+                            </div>              
+                            ";
+                            $index++;
+                        }
                     }
                     echo "
                         <div class='pager_container'>
                             <div class='pagination'>
-                                <ul id='queryPager'>
+                                <ul id='rentPager'>
                                     
                                 </ul>
                             </div>
                         </div>
-                        
+
                     </div>";
+                } else {
+                    $queryExists = true;
+                    $keysArr = ['sale_or_rent', 'city', 'asset_type', 'min_rooms', 'max_rooms', 'min_price', 'max_price', 'check_boxes', 'floor', 'max_floor', 'min_size', 'max_size', 'entrance_date'];
+                    $checkboxes = [];
+                    $assetTypes = [];
+                    $parameters = [];
+                    $i = 0;
+                    $parking_station = false;
+
+                    // set array of user's input parameters while arr's key is equal to db fields name
+                    foreach($_GET as $key => $value) {
+                        if(!empty($value)) {
+                            
+                            if($key == "check_boxes") {
+                                $checkboxes = explode(",", $value);
+                                unset($checkboxes[count($checkboxes) - 1]);
+                                $parking_station = in_array("חניה", $checkboxes);
+                            } else if($key == "asset_type") {
+                                $assetTypes = explode(",", $value);
+                                unset($assetTypes[count($assetTypes) - 1]);
+                            } else {
+
+                                $parameters[$keysArr[$i]]= trim($value);
+                            }
+                        }
+                        $i++;
+                    }
+                    // $checkboxes = explode(",", $parameters);
+                //   print_r($parameters);
+                //   print_r($checkboxes);
+
+                    /* BUILD SPECIFIC USER QUERY */
+
+                    $asset_status_hebrew = "";
+                    $actual_asset_status = "";
+                    if(!isset($parameters['sale_or_rent']) or empty($parameters['sale_or_rent'])){
+                        echo "השתבש";
+                    }
+                    if($parameters['sale_or_rent'] == 'sale') {
+                        $asset_status_hebrew = "למכירה";
+                        $actual_asset_status = "sale";
+                    } else if ($parameters['sale_or_rent'] == 'rent') {
+                        $asset_status_hebrew = "להשכרה";
+                        $actual_asset_status = "rent";
+                    }
 
                     
+                    $userQ = "SELECT assets_info_table.*
+                                FROM assets_info_table
+                                WHERE ";
+                    foreach($parameters as $key => $value) {
+                        if ($key == 'min_price') {
+                            $min_price = str_replace(',', '', $value);
+                            $userQ = $userQ . " REPLACE(price, ',', '') >= $min_price  AND";
+                            continue;
+                        } else if ($key == 'max_price') {
+                            $max_price = str_replace(',', '', $value);
+                            $userQ = $userQ . " REPLACE(price, ',', '') <=  $max_price AND";
+                            continue;
+                        } else if ($key == 'min_rooms') {
+                            $userQ = $userQ . " num_of_rooms >= $value AND";
+                            continue;
+                        } else if ($key == 'max_rooms') {
+                            $userQ = $userQ . " num_of_rooms <= $value AND";
+                            continue;
+                        } else if ($key == 'floor') {
+                            $userQ = $userQ . " floor >= $value AND";
+                            continue;
+                        } else if ($key == 'max_floor') {
+                            $userQ = $userQ . " floor <= $value AND";
+                            continue;
+                        } else if ($key == 'min_size') {
+                            $userQ = $userQ . " size_in_sm >= $value AND";
+                            continue;
+                        } else if ($key == 'max_size') {
+                            $userQ = $userQ . " size_in_sm <= $value AND";
+                            continue;
+                        } else if ($key == 'entrance_date') {
+                            $userQ = $userQ . " DATE(entrance_date) >= $value AND";
+                            continue;
+                        }
+                        $userQ = $userQ . " $key LIKE '%$value%' AND";
+                    }
+                    if($parking_station){
+                        $userQ = $userQ . " parking_station NOT LIKE '%ללא%' AND";
+                    }
+                    foreach($checkboxes as $key => $value) {
+                        if($value == 'חניה'){
+                            continue;
+                        }
+                        $userQ = $userQ . " check_boxes LIKE '%$value%' AND";
+                    }
+                    if(!empty($assetTypes)){
+                        $userQ = $userQ . "(";
+                    }
+                    foreach($assetTypes as $key => $value) {
+                        $userQ = $userQ . " asset_type LIKE '%$value%' OR";
+                    }
+                    // if last word in userQ is AND or OR then remove it
+                    if (substr($userQ, strlen($userQ) - 3, strlen($userQ)) == 'AND') {
 
-                } else {
-                    echo "השתבש 2";
+                        $userQ = substr($userQ, 0, strlen($userQ) - 3);
+                    
+                    } else if (substr($userQ, strlen($userQ) - 2, strlen($userQ)) == 'OR') {
+                        
+                        $userQ = substr($userQ, 0, strlen($userQ) - 2);
+                        $userQ = $userQ . ")";
+                        
+                    }
+
+                    
+                    echo $userQ;
+
+                    
+                    if($_GET['sale_or_rent'] == $actual_asset_status){
+                        $userQ_run = mysqli_query($con, $userQ);
+                        $index = 1;
+                        echo "
+                        <div class='assets_wrapper'>
+                            <div class='for_sale_title'>
+                                <h1>$asset_status_hebrew</h1>
+                            </div>
+                        ";
+                        while($card = mysqli_fetch_array($userQ_run)){
+                            $background_path = '../images/title_icon.png';
+                            for($i = 1; $i < 9; $i++){
+                                if($card['file'.$i.'_path']){
+                                    $background_path = $card['file'.$i.'_path'];
+                                    break;
+                                }
+                            }
+                            $price = "";
+                            $symbol = "";
+                            if($card['price'] > "" and $card['currency'] == 'shekel'){
+                                $price = "מחיר: $card[price] ₪";
+                                $symbol = "₪";
+                            } elseif ($card['price'] > "" and $card['currency'] == 'dollar'){
+                                $price = "מחיר: $card[price] $";
+                                $symbol = "$";
+                            }
+                            echo "
+                            <div class='asset_card query' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path);"; if($index > $max_cards){echo "display: none;";} echo "'>
+                                ";
+                                if($isRegistered and strpos($card['email_likes'], $email)) {
+                                    echo "<form class='unlikeForm' action='UnlikeCode.php' method='POST'>
+                                            <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                } else {
+                                    echo "<form class='likeForm' action='LikeCode.php' method='POST'>
+                                            <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                            <input type='hidden' name='type' value='asset'>
+                                            <input type='hidden' name='type_id' value=$card[id]>
+                                        </form>";
+                                }
+                                echo "<div class='description'>
+                                    <h4>$card[street] $card[house_number], $card[city]</h4>
+                                    <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
+                                    <span>$price</span>
+                                </div>
+                            </div>             
+                            ";
+
+                            $index++;
+                        }
+                        if(mysqli_num_rows($userQ_run) < 1) {
+                            echo "<h3>לא נמצאו תוצאות.</h3>";
+                        }
+                        echo "
+                            <div class='pager_container'>
+                                <div class='pagination'>
+                                    <ul id='queryPager'>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                        </div>";
+
+                        
+
+                    } else {
+                        echo "השתבש 2";
+                    }
                 }
-            }
 
-
+        } catch (Exception $e){
+            echo $e->getMessage();
+        } finally {
             mysqli_close($con);
+        }
         ?>
         
 
@@ -833,6 +888,22 @@
                 let numOfPages = Math.ceil(numOfCards.length / MAX_CARDS);
                 
                 element("queryPager", numOfPages, 1, "query", MAX_CARDS);
+            }
+
+            // like form function
+            var isRegistered = <?php echo json_encode($isRegistered); ?>;
+            var likeBtn = document.querySelectorAll('.likeBtn');
+            for(var i = 0; i < likeBtn.length; i++){
+                likeBtn[i].onclick = function(e){likeFunction(e);};
+            }
+            function likeFunction(e){ 
+                
+                if(!isRegistered){
+                    alert("על מנת לעשות פעולה זאת עליך להתחבר.");
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
             }
         </script>
     </body>

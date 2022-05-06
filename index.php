@@ -106,47 +106,69 @@
             <div class="agents_container">
                 <?php 
                     include_once("loginSystem/db.php");
-                    $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, AVG(reviews_info_table.stars) as min_rank
+                    $search_agents = "SELECT agents_info_table.office_name, agents_info_table.for_sale, agents_info_table.for_rent, agents_info_table.email, agents_info_table.agent_cities, agents_info_table.phone_number, agents_info_table.logo_path, agents_info_table.id, agents_info_table.email_likes, AVG(reviews_info_table.stars) as min_rank
                                         FROM agents_info_table
                                         LEFT JOIN reviews_info_table on agents_info_table.email = reviews_info_table.to_email
-                                        GROUP BY reviews_info_table.to_email
+                                        GROUP BY agents_info_table.email
                                         ORDER BY min_rank DESC LIMIT 4";
-                    $search_agents_run = mysqli_query($con, $search_agents);
+                    try{
+                        $search_agents_run = mysqli_query($con, $search_agents);
 
-                    while($agent = mysqli_fetch_array($search_agents_run)) {
-                        $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
-                        $cities = str_replace(",", ", ", $agent['agent_cities']);
+                        while($agent = mysqli_fetch_array($search_agents_run)) {
+                            $picture_path = substr($agent['logo_path'], 3, strlen($agent['logo_path']));
+                            $cities = str_replace(",", ", ", $agent['agent_cities']);
 
-                        echo "
-                            <div class='agent_card'>
-                                <div class='agent_top_card'>
-                                    <div class='agent_pic_container'>
-                                        <img src=$picture_path onclick='window.location.href=`public/AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                            echo "
+                                <div class='agent_card'>
+                                    <div class='agent_top_card'>
+                                        <div class='agent_pic_container'>
+                                            <img src=$picture_path onclick='window.location.href=`public/AgentProfile.php?email=$agent[email]`' alt=agent_pic>
+                                        </div>
+                                        <div class='agent_top_details'>
+                                            <div class='title'>
+                                                <a class='agent_title' href='public/AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
+                                                ";
+                                                if($isRegistered and strpos($agent['email_likes'], $_SESSION['email'])) {
+                                                    echo "<form class='unlikeForm' action='public/UnlikeCode.php' method='POST'>
+                                                            <button class='unlikeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                            <input type='hidden' name='type' value='agent'>
+                                                            <input type='hidden' name='type_id' value=$agent[id]>
+                                                        </form>";
+                                                } else {
+                                                    echo "<form class='likeForm' action='public/LikeCode.php' method='POST'>
+                                                            <button class='likeBtn' type='submit'><i class='fa-regular fa-heart'></i></button>
+                                                            <input type='hidden' name='type' value='agent'>
+                                                            <input type='hidden' name='type_id' value=$agent[id]>
+                                                        </form>";
+                                                }
+                                            echo "
+                                            </div>
+                                            <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
+                                            <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
+                                            <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
+                                        </div>
                                     </div>
-                                    <div class='agent_top_details'>
-                                        <a class='agent_title' href='public/AgentProfile.php?email=$agent[email]'>$agent[office_name]</a>
-                                        <span class='agent_forsale'>נכסים למכירה: $agent[for_sale]</span>
-                                        <span class='agent_forsale'>נכסים להשכרה: $agent[for_rent]</span>
-                                        <span class='agent_forsale'>ממוצע דירוג לקוחות: $agent[min_rank]</span>
+                                    <div class='agent_bottom_card'>
+                                        <div class='agent_cities'>
+                                            <div>
+                                                <label>עריי פעילות:</label>
+                                                <p class='title'>$cities</p>
+                                            </div>
+                                            <div>
+                                                <label>צור קשר:</label>
+                                                <p class='title'>$agent[phone_number]</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class='agent_bottom_card'>
-                                    <div class='agent_cities'>
-                                        <div>
-                                            <label>עריי פעילות:</label>
-                                            <p class='title'>$cities</p>
-                                        </div>
-                                        <div>
-                                            <label>צור קשר:</label>
-                                            <p class='title'>$agent[phone_number]</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ";
-                    }
+                            ";
+                        }
 
-                    mysqli_close($con);
+                        mysqli_close($con);
+
+                } catch (Exception $e){
+                    echo $e->getMessage();
+                }
                 ?>
             </div>
         </div>
@@ -209,5 +231,24 @@
                 </div>
             </section>
         </div>
+        <script>
+
+            // like form function
+            var isRegistered = <?php echo json_encode($isRegistered); ?>;
+            var likeBtn = document.querySelectorAll('.likeBtn');
+            for(var i = 0; i < likeBtn.length; i++){
+                likeBtn[i].onclick = function(e){likeFunction(e);};
+            }
+            function likeFunction(e){ 
+                
+                if(!isRegistered){
+                    alert("על מנת לעשות פעולה זאת עליך להתחבר.");
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+            }
+
+        </script>
     </body>
 </html>

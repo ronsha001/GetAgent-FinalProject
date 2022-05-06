@@ -15,6 +15,15 @@
     justify-content: center;
     flex-wrap: wrap;
     direction: rtl;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.agents_container .top_title{
+    width: 100%;
+    text-align: center;
+}
+.agents_container .top_title h1{
+    margin: 5px;
+    padding: 0;
 }
 .agent_card{
     border: 2px solid #ff9001;
@@ -75,7 +84,51 @@
     margin: 3px;
     margin-top: 0;
     direction: rtl;
-    transform: translateY(-25%);
+}
+.agent_top_details a{
+    margin: 0;
+}
+.agent_top_details .title{
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+}
+.title .unlikeForm button{
+    float: left;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    margin: 2px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease-out .3s;
+    background-color: #ff9001;
+}
+.title .likeForm button{
+    float: left;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    margin: 2px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all ease-out .3s;
+}
+.title .likeForm button:hover{
+    background-color: #ff9001;
+}
+.title .likeForm button i{
+    transform: translate(3%, 3%);
+}
+.title .unlikeForm button i{
+    transform: translate(3%, 3%);
 }
 
 .agent_top_details .agent_title{

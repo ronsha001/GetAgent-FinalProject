@@ -52,7 +52,7 @@
                 <span></span>
                 <label>סיסמה</label>
             </div>
-            <div class="signup_link"><a href="forgotPass.php">שכחתה את הסיסמה?</a></div>
+            <div class="signup_link"><a href="forgotPassPage.php">שכחתה את הסיסמה?</a></div>
             <input type="submit" name="submit" value="התחבר">
             <div class="signup_link">
                 עוד לא רשום? <a href="sign_up_page.php">הירשם</a>

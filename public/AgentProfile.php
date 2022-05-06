@@ -183,11 +183,21 @@
         </div>
         
         <div class="contact">
+            <!-- 2da44e -->
+            <?php
+                if(isset($_SESSION['status'])){
+                    echo "<div class='status_container'>
+                            <h3>$_SESSION[status]</h3>
+                        </div>
+                    ";
+                    unset($_SESSION['status']);
+                } 
+            ?>
             <h2><i class="fa-solid fa-phone-flip"></i> התקשר לפרטים נוספים</h2>
             <h1><?php echo $phone_number; ?></h1>
             <small>מלא פרטים לחזרה:</small>
             <div class="call_back">
-                <form action="#" method="POST">
+                <form action="mailAgent.php" method="POST">
                     <div class="new_btn_container">
                         <div class="form">
                             <input type="text" name="name" class="form__input" required>
@@ -197,11 +207,11 @@
 
                     <div class="new_btn_container">
                         <div class="form">
-                            <input type="text" name="name" class="form__input" required>
+                            <input type="tel" name="phone" class="form__input" required>
                             <label class="form__label"><i class="fa-solid fa-phone-flip"></i> טלפון</label>
                         </div>
                     </div>
-
+                    <input type="hidden" name="agent_email" value="<?php echo $email; ?>">
                     <input type="submit" name="submit" id="submit" value="חזור אליי">
                 </form>
             </div>
@@ -361,6 +371,9 @@
                     }
                     echo ("
                     <div class='asset_card forSale' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
+                        <form class='likeForm' action='#' method='POST'>
+                            <button type='submit'><i class='fa-regular fa-heart'></i></button>
+                        </form>
                         <div class='description'>
                             <h4>$card[street] $card[house_number], $card[city]</h4>
                             <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
@@ -412,6 +425,9 @@
                     }
                     echo ("
                     <div class='asset_card forRent' id=$card[id] onclick='window.location.href=`AssetPage.php?id=$card[id]`' style='background-image: url($background_path)'>
+                        <form class='likeForm' action='#' method='POST'>
+                            <button type='submit'><i class='fa-regular fa-heart'></i></button>
+                        </form>
                         <div class='description'>
                             <h4>$card[street] $card[house_number], $card[city]</h4>
                             <span>$card[asset_type], $card[num_of_rooms] חדרים, $card[size_in_sm] מ\"ר, קומה $card[floor] מתוך $card[max_floor].</span>
