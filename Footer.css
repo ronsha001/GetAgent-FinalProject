@@ -130,16 +130,19 @@
     max-width: 1000px;
     margin: 40px auto 0 auto;
 }
+.social-media-wrap .footer-logo{
+}
 
 .social-icons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 240px;
+    width: fit-content;
 }
 .social-icons a{
     color: #fff;
     font-size: 30px;
+    margin: 10px;
 }
 
 .social-logo {

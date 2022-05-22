@@ -3,7 +3,6 @@
     $email = '';
     $agent_profile = '<i class="fa-solid fa-plus"></i> צור פרופיל סוכן';
     $agent_profile_footer = 'צור פרופיל סוכן';
-    $agency_profile = 'צור פרופיל סוכנות';
     $agent_link = '../loginSystem/login_page.php';
     $first_name = '';
     $login_or_logout = '';
@@ -24,10 +23,7 @@
             $agent_profile = 'פרופיל הסוכן שלי';
             $agent_profile_footer = 'פרופיל הסוכן שלי';
         } 
-        if ($_SESSION['is_agency'] == 1) {
-            $agency_link = '#'; // TODO create agency page
-            $agency_profile = 'פרופיל הסוכנות שלי';
-        }
+        
     }
 
     // READ CITIES.TXT FILE
@@ -617,38 +613,18 @@
 
         <!-- FOOTER SECTION -->
         <div class="footer-container">
-            <section class="footer-subscription">
-                <p class="footer-subscription-heading">
-                    הצטרף לניוזלטר כדי לקבל את העדכונים החדשים שלנו
-                </p>
-                <p class="footer-subscription-text">
-                    ניתן לבטל את המנוי בכל עת.
-                </p>
-                <div class="input-areas">
-                    <form action="#" method="POST">
-                        <input type="email" name="email" placeholder="אימייל" class="footer-input">
-                        <input type="submit" class="subscribe-btn" value="הירשם">
-                    </form>
-                </div>
-            </section>
+            
             <div class="footer-links">
                 <div class="footer-link-wrapper">
                     <div class="footer-link-items">
                         <h2>עלינו</h2>
                         <a href="../About/about_page.php">על גט אייג'נט</a>
-                        <a href="#">איך זה עובד</a>
                     </div>
-                    <div class="footer-link-items">
-                        <h2>צור קשר</h2>
-                        <a href="#">צור איתנו קשר</a>
-                        <a href="#">תמיכה</a>
-                        <a href="#">המלצות</a>
-                    </div>
+                    
                     <div class="footer-link-items">
                         <h2>חשבון</h2>
                         <?php if(!$isRegistered){echo "<a href='../loginSystem/login_page.php'>התחבר</a>";}else{echo "<a href='../Accounts/account_page.php'>החשבון שלי</a>";} ?>
                         <a href="<?php echo $agent_link; ?>"> <?php echo $agent_profile_footer; ?> </a>
-                        <a href="#"> <?php echo $agency_profile; ?> </a>
                     </div>
                     <div class="footer-link-items">
                         <h2>חיפושים</h2>
@@ -664,11 +640,9 @@
                     </div>
                     <small class="website-rights">גט אייג'נט © 2022</small>
                     <div class="social-icons">
-                        <a href="#" target="_blank"><i class="fa-brands fa-facebook-square"></i></a>
-                        <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="https://www.facebook.com/Ronsh0111/" target="_blank"><i class="fa-brands fa-facebook-square"></i></a>
+                        <a href="https://www.instagram.com/ronsharabii/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/ron-sharabi/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
                     </div>
                 </div>
             </section>

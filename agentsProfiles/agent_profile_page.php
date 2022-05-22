@@ -22,10 +22,7 @@
     $for_sale = $_SESSION['for_sale'];
     $for_rent = $_SESSION['for_rent'];
     $agency_profile = 'צור פרופיל סוכנות';
-    if ($_SESSION['is_agency'] == 1) {
-        $agency_link = '#'; // TODO create agency page
-        $agency_profile = 'פרופיל הסוכנות שלי';
-    }
+    
 
     # Add space after each comma in agent_cities
     $formatted_agent_cities = "";
@@ -166,31 +163,7 @@
             </div>
         </div>
         
-        <div class="contact">
-            <h2><i class="fa-solid fa-phone-flip"></i> התקשר לפרטים נוספים</h2>
-            <h1><?php echo $phone_number; ?></h1>
-            <small>מלא פרטים לחזרה:</small>
-            <div class="call_back">
-                <form action="#" method="POST">
-                    <div class="new_btn_container">
-                        <div class="form">
-                            <input type="text" name="name" class="form__input" required>
-                            <label class="form__label"><i class="fa-solid fa-user"></i> שם</label>
-                        </div>
-                    </div>
-
-                    <div class="new_btn_container">
-                        <div class="form">
-                            <input type="text" name="name" class="form__input" required>
-                            <label class="form__label"><i class="fa-solid fa-phone-flip"></i> טלפון</label>
-                        </div>
-                    </div>
-
-                    <input type="submit" name="submit" id="submit" value="חזור אליי">
-                </form>
-            </div>
-            
-        </div>
+        
     </div>
 
     <!-- ASSETS SECTION -->   
@@ -270,13 +243,6 @@
             }
         ?>
         
-        <!-- <div class="asset_card" style="background-image: url(../images/house1.jpg);">
-            <div class="description">
-                <h4>בן אליעזר אריה 45, רמת גן</h4>
-                <span>דירה, 4.5 חדרים, 100 מ"ר, קומה 5 מתוך 7.</span>
-                <span>מחיר: 2,840,000 ₪</span>
-            </div>
-        </div> -->
     </div>
 
     <!-- FOR RENT -->
@@ -359,38 +325,18 @@
 
     <!-- FOOTER SECTION -->
     <div class="footer-container">
-        <section class="footer-subscription">
-            <p class="footer-subscription-heading">
-                הצטרף לניוזלטר כדי לקבל את העדכונים החדשים שלנו
-            </p>
-            <p class="footer-subscription-text">
-                ניתן לבטל את המנוי בכל עת.
-            </p>
-            <div class="input-areas">
-                <form action="#" method="POST">
-                    <input type="email" name="email" placeholder="אימייל" class="footer-input">
-                    <input type="submit" class="subscribe-btn" value="הירשם">
-                </form>
-            </div>
-        </section>
+        
         <div class="footer-links">
             <div class="footer-link-wrapper">
                 <div class="footer-link-items">
                     <h2>עלינו</h2>
                     <a href="../About/about_page.php">על גט אייג'נט</a>
-                    <a href="#">איך זה עובד</a>
                 </div>
-                <div class="footer-link-items">
-                    <h2>צור קשר</h2>
-                    <a href="#">צור איתנו קשר</a>
-                    <a href="#">תמיכה</a>
-                    <a href="#">המלצות</a>
-                </div>
+                
                 <div class="footer-link-items">
                     <h2>חשבון</h2>
                     <a href="../Accounts/account_page.php">החשבון שלי</a>
                     <a href="#">פרופיל הסוכן שלי</a>
-                    <a href="#"> <?php echo $agency_profile; ?> </a>
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
@@ -406,11 +352,9 @@
                 </div>
                 <small class="website-rights">גט אייג'נט © 2022</small>
                 <div class="social-icons">
-                    <a href="#" target="_blank"><i class="fa-brands fa-facebook-square"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://www.facebook.com/Ronsh0111/" target="_blank"><i class="fa-brands fa-facebook-square"></i></a>
+                    <a href="https://www.instagram.com/ronsharabii/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ron-sharabi/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </section>

@@ -209,27 +209,6 @@
                             }
                         ?>
                     </div>
-                    <div class="contact_wrapper">
-                        <div class="contact_container">
-                            <div class="agent_details">
-                                <div class="icon_name">
-                                    <i class="fa-solid fa-circle-user"></i>
-                                    <span><?php echo $_POST['office_name']; ?></span>
-                                </div>
-                                <div class="agent_phone">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <span><?php echo $_POST['agent_phone']; ?></span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="user_details">
-                                <form action="" method="POST">
-                                    <input type="tel" name="user_phone" class="user_phone" placeholder="מספר פלאפון" required>
-                                    <input type="submit" class="contact_submit" name="submit" value="אני רוצה עוד פרטים">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     
                 </div>
             </div>
@@ -300,38 +279,18 @@
 
     <!-- FOOTER SECTION -->
     <div class="footer-container">
-        <section class="footer-subscription">
-            <p class="footer-subscription-heading">
-                הצטרף לניוזלטר כדי לקבל את העדכונים החדשים שלנו
-            </p>
-            <p class="footer-subscription-text">
-                ניתן לבטל את המנוי בכל עת.
-            </p>
-            <div class="input-areas">
-                <form action="#" method="POST">
-                    <input type="email" name="email" placeholder="אימייל" class="footer-input">
-                    <input type="submit" class="subscribe-btn" value="הירשם">
-                </form>
-            </div>
-        </section>
+        
         <div class="footer-links">
             <div class="footer-link-wrapper">
                 <div class="footer-link-items">
                     <h2>עלינו</h2>
                     <a href="../About/about_page.php">על גט אייג'נט</a>
-                    <a href="#">איך זה עובד</a>
                 </div>
-                <div class="footer-link-items">
-                    <h2>צור קשר</h2>
-                    <a href="#">צור איתנו קשר</a>
-                    <a href="#">תמיכה</a>
-                    <a href="#">המלצות</a>
-                </div>
+                
                 <div class="footer-link-items">
                     <h2>חשבון</h2>
                     <a href="../Accounts/account_page.php">החשבון שלי</a>
                     <a href="agent_profile_page.php">פרופיל הסוכן שלי</a>
-                    <a href="#"> <?php echo $agency_profile; ?> </a>
                 </div>
                 <div class="footer-link-items">
                     <h2>חיפושים</h2>
@@ -347,11 +306,9 @@
                 </div>
                 <small class="website-rights">גט אייג'נט © 2022</small>
                 <div class="social-icons">
-                    <a href="#" tarPOST="_blank"><i class="fa-brands fa-facebook-square"></i></a>
-                    <a href="#" tarPOST="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" tarPOST="_blank"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" tarPOST="_blank"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#" tarPOST="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://www.facebook.com/Ronsh0111/" target="_blank"><i class="fa-brands fa-facebook-square"></i></a>
+                    <a href="https://www.instagram.com/ronsharabii/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/ron-sharabi/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
                 </div>
             </div>
         </section>
