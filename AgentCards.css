@@ -16,6 +16,7 @@
     flex-wrap: wrap;
     direction: rtl;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #333333;
 }
 .agents_container .top_title{
     width: 100%;

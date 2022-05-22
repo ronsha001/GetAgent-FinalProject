@@ -30,7 +30,7 @@
             $office_name = trim($_POST['office_name']);
             $license_year = trim($_POST['license_year']);
 
-            $images_folder_path ="$folder_path./images";
+            $images_folder_path ="$folder_path/images";
             $fileDestination = "";
             include_once('../loginSystem/db.php');
             if (!empty($file['name'])){

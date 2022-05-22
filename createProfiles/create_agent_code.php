@@ -1,6 +1,6 @@
 <?php session_start();
     if(isset($_POST['submit'])){
-        if($_SESSION['is_agent'] === '0' and isset($_SESSION['email']) and isset($_SESSION['verify_token']) and !empty($_SESSION['email']) and !empty($_SESSION['verify_token'])){
+        if($_SESSION['is_agent'] == 0 and isset($_SESSION['email']) and isset($_SESSION['verify_token']) and !empty($_SESSION['email']) and !empty($_SESSION['verify_token'])){
             $token = $_SESSION['verify_token'];
             $email = $_SESSION['email'];
             $file = $_FILES['my_logo'];
@@ -80,7 +80,7 @@
             // $create_agent_table = "CREATE TABLE `".$agent_info_table_name."` (logo_path VARCHAR(255), agent_cities VARCHAR(255), phone_number VARCHAR(255), birth_date VARCHAR(255), website_link VARCHAR(1500), office_address VARCHAR(255), years_of_exp VARCHAR(255), descrip VARCHAR(255))";
             // $create_agent_table_run = mysqli_query($con, $create_agent_table);
             try{
-                $insert_info = "INSERT INTO agents_info_table (`folder_path`, `logo_path`, `agent_cities`, `phone_number`, `birth_date`, `website_link`, `office_address`, `years_of_exp`, `about_agent`, `office_name`, `license_year`, `for_sale`, `for_rent`, `email`, `verify_token`, `id`) VALUES ('$new_folder_uniqid', '$fileDestination', '$agent_cities', '$phone_number', '$birth_date', '$website_link', '$office_address', '$years_of_exp', '$about_agent', '$office_name', '$license_year', '$for_sale', '$for_rent', '$email', '$token', '$id')";
+                $insert_info = "INSERT INTO agents_info_table (`folder_path`, `logo_path`, `agent_cities`, `phone_number`, `birth_date`, `website_link`, `office_address`, `years_of_exp`, `about_agent`, `office_name`, `license_year`, `for_sale`, `for_rent`, `email`, `verify_token`, `id`, `email_likes`) VALUES ('$new_folder_uniqid', '$fileDestination', '$agent_cities', '$phone_number', '$birth_date', '$website_link', '$office_address', '$years_of_exp', '$about_agent', '$office_name', '$license_year', '$for_sale', '$for_rent', '$email', '$token', '$id', ',')";
                 $insert_info_run = mysqli_query($con, $insert_info);
     
                 $change_to_agent = "UPDATE accounts SET isAgent='1' WHERE verify_token='$token' AND email='$email' AND id='$id' LIMIT 1";

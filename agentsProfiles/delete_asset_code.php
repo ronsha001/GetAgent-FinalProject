@@ -43,8 +43,13 @@
 
                         // if account has a profile
                         if($isAgent and $id and $asset_directory) {
-                            
-                            // delete all agent's assets from assets table
+                            // check status of the asset (for sale or for rent)
+                            $sale_or_rent_query = "SELECT sale_or_rent
+                                                    FROM assets_info_table
+                                                    WHERE email='$email' AND id='$id'
+                                                    LIMIT 1";
+                            $sale_or_rent_query_run = mysqli_query($con, $sale_or_rent_query);
+                            // delete agent's asset from assets table
                             $delete_asset = "DELETE FROM assets_info_table
                                                 WHERE email='$email' AND id='$id'
                                                 LIMIT 1";
@@ -53,6 +58,23 @@
                             if(mysqli_affected_rows($con)){
                                 // delete agent's files (assets directories and pictures)
                                 deleteDirectory($asset_directory);
+
+                                // decrease agent's assets for sale or for rent (for_sale - 1) or (for_rent - 1)
+                                $assetStatus = mysqli_fetch_array($sale_or_rent_query_run);
+                                $sale_or_rent = "";
+                                if($assetStatus['sale_or_rent'] == 'rent') {
+                                    $sale_or_rent = 'for_rent';
+                                } else if ($assetStatus['sale_or_rent'] == 'sale') {
+                                    $sale_or_rent = 'for_sale';
+                                }
+
+                                $decrease = "UPDATE agents_info_table
+                                                SET $sale_or_rent=$sale_or_rent - 1
+                                                WHERE email='$email'
+                                                LIMIT 1";
+                                $decrease_run = mysqli_query($con, $decrease);
+                                
+                                $_SESSION[$sale_or_rent]--;
                             }
                         }
                     }
