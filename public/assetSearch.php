@@ -131,7 +131,7 @@
                         <label for="city"><i class="fa-solid fa-tree-city"></i> חפש עיר</label>
                         <input type="text" name="city" list="cities" id="city" placeholder="לדוגמא: תל אביב יפו">
                         <datalist id="cities">
-                            
+                            <!-- READ CITIES LIST FROM SERVER -->
                         </datalist>
                     </div>
                     <!-- type input -->
@@ -140,13 +140,7 @@
                         <div id="list1" class="dropdown-check-list" tabindex="100">
                             <span class="anchor">בחרו את סוג הנכס</span>
                             <ul class="items" id="asset_type">
-                                <!-- <li><input type="checkbox" />Apple </li>
-                                <li><input type="checkbox" />Orange</li>
-                                <li><input type="checkbox" />Grapes </li>
-                                <li><input type="checkbox" />Berry </li>
-                                <li><input type="checkbox" />Mango </li>
-                                <li><input type="checkbox" />Banana </li>
-                                <li><input type="checkbox" />Tomato</li> -->
+                                <!-- READ TYPES LIST FROM SERVER -->
                             </ul>
 
                             <input type="hidden" name="asset_type" id="typeStr">
@@ -443,11 +437,6 @@
                         }
                         $i++;
                     }
-                    // $checkboxes = explode(",", $parameters);
-                //   print_r($parameters);
-                //   print_r($checkboxes);
-
-                    /* BUILD SPECIFIC USER QUERY */
 
                     $asset_status_hebrew = "";
                     $actual_asset_status = "";

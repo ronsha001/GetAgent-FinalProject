@@ -40,7 +40,6 @@
                 $_SESSION['picture_path'] = $account_details['picture_path'];
             }
             $_SESSION['is_agent'] = $account_details['isAgent'];
-            $_SESSION['is_agency'] = $account_details['isAgency'];
             
             if($_SESSION['is_agent'] == 1){
                 $token = $_SESSION['verify_token'];
